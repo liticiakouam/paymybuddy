@@ -39,12 +39,10 @@ public class BankAccountController {
         bankAccountService.save(bankAccount);
         return "redirect:/bankAccount";
     }
-/*
-    @GetMapping("/disable/{id}")
-    public String updateBankAccount(@PathVariable int id, Model model) {
-        BankAccount bankAccount = bankAccountService.update(id);
 
-        model.addAttribute("bankAccount", bankAccount);
+    @GetMapping("/disable/{id}")
+    public String updateBankAccount(@PathVariable int id) {
+        BankAccount bankAccount = bankAccountService.update(id);
         return "redirect:/bankAccount";
-    }*/
+    }
 }
