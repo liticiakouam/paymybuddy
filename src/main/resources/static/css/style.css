@@ -1,0 +1,169 @@
+body {
+  font-family: "Open Sans", sans-serif;
+  background: #f6f9ff;
+  color: #444444;
+}
+
+a {
+  color: #45975c;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #717ff5;
+  text-decoration: none;
+}
+
+li a{
+    color: #012970;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Nunito", sans-serif;
+}
+
+#main {
+  margin-top: 60px;
+  padding: 20px 30px;
+  transition: all 0.3s;
+}
+
+@media (max-width: 1199px) {
+  #main {
+    padding: 20px;
+  }
+}
+
+.pagetitle {
+  margin-bottom: 10px;
+}
+
+.pagetitle h1 {
+  font-size: 24px;
+  margin-bottom: 0;
+  font-weight: 600;
+  color: #012970;
+}
+
+
+.back-to-top {
+  position: fixed;
+  visibility: hidden;
+  opacity: 0;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background: #4154f1;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+
+.back-to-top i {
+  font-size: 24px;
+  color: #fff;
+  line-height: 0;
+}
+
+.back-to-top:hover {
+  background: #6776f4;
+  color: #fff;
+}
+
+.back-to-top.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Card */
+.card {
+  margin-bottom: 30px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+}
+
+.card-header,
+.card-footer {
+  border-color: #ebeef4;
+  background-color: #fff;
+  color: #798eb3;
+  padding: 15px;
+}
+
+.card-title {
+  padding: 20px 0 15px 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #012970;
+  font-family: "Poppins", sans-serif;
+}
+
+.card-title span {
+  color: #899bbd;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.card-body {
+  padding: 0 20px 20px 20px;
+}
+
+.card-img-overlay {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+
+/* Breadcrumbs */
+.breadcrumb {
+  font-size: 14px;
+  font-family: "Nunito", sans-serif;
+  color: #89bd96;
+  font-weight: 600;
+}
+
+.breadcrumb a {
+  color: #89bd9f;
+  transition: 0.3s;
+}
+
+.breadcrumb a:hover {
+  color: #518f51;
+}
+
+.breadcrumb .breadcrumb-item::before {
+  color: #32c40e;
+}
+
+.breadcrumb .active {
+  color: #39e741;
+  font-weight: 600;
+}
+
+/* Bordered Tabs */
+.nav-tabs-bordered {
+  border-bottom: 2px solid #ebeef4;
+}
+
+.nav-tabs-bordered .nav-link {
+  margin-bottom: -2px;
+  border: none;
+  color: #11a70cc0;
+}
+
+.nav-tabs-bordered .nav-link:hover,
+.nav-tabs-bordered .nav-link:focus {
+  color: #18d622;
+}
+
+.nav-tabs-bordered .nav-link.active {
+  background-color: #fff;
+  color: #33f033;
+  border-bottom: 2px solid #41f16d;
+}
