@@ -88,7 +88,7 @@
             <table class="table table-hover">
               <thead>
               <tr>
-                <th scope="col">Connections</th>
+                <th scope="col">Description</th>
                 <th scope="col">Account Number</th>
                 <th scope="col">Action</th>
               </tr>
@@ -98,13 +98,9 @@
                 <td th:text = "${bankAccount.description}"></td>
                 <td th:text = "${bankAccount.accountNumber}"></td>
                 <td>
+                  <a th:href="@{/disable/{id}(id=${bankAccount.id})}" class="btn btn-warning bi bi-toggle2-on">Disable</a>
 <!--
-                  <a th:href="@{/disable/{id}(id=${bankAccount.id})}" class="btn btn-danger bi bi-toggle2-on">Disable</a>
--->
                   <a  class="btn btn-warning bi bi-toggle2-on">Disable</a>
-
-<!--
-                  <button data-toggle="modal" data-target="#editModal"><i class="btn btn-danger bi bi-toggle2-on">Disable</i></button>
 -->
                 </td>
               </tr>
