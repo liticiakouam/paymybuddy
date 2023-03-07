@@ -27,6 +27,7 @@ public class BankAccountController {
         BankAccountCreate bankAccount = new BankAccountCreate();
         model.addAttribute("bankAccount", bankAccount);
         model.addAttribute("bankAccounts", bankAccountService.getAll());
+
         return findPaginated(1, model);
     }
 
@@ -38,13 +39,14 @@ public class BankAccountController {
 
         Page <BankAccount> page = bankAccountService.findPaginated(pageNo, pageSize);
         List <BankAccount> bankAccounts = page.getContent();
-
         BankAccountCreate bankAccount = new BankAccountCreate();
+
         model.addAttribute("bankAccount", bankAccount);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("bankAccounts", bankAccounts);
+
         return "bankAccount";
     }
 /*    @GetMapping("/bankAccount/add")
@@ -69,9 +71,10 @@ public class BankAccountController {
            bankAccountService.save(bankAccountCreate);
            redirectAttributes.addFlashAttribute("saved", "The bankAccount is save!");
         } catch (AccountNumberAlreadyExist e) {
-            model.addAttribute("message", "Sorry, the account number you are trying to insert already exist");
+            redirectAttributes.addFlashAttribute("message", "Sorry, a bank account with the account number already exist");
+
             model.addAttribute("bankAccounts", bankAccountService.getAll());
-            return "bankAccount";
+            return "redirect:/bankAccount";
         }
         return "redirect:/bankAccount";
     }

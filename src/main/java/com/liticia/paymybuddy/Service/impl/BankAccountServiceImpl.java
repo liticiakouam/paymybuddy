@@ -46,7 +46,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public Page<BankAccount> findPaginated(int pageNo, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
         return bankAccountRepository.findAll(pageable);
     }
 
