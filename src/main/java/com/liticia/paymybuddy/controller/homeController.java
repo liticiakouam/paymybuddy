@@ -1,6 +1,7 @@
 package com.liticia.paymybuddy.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class homeController {
@@ -17,6 +18,6 @@ public class homeController {
 
     @GetMapping("/profile")
     public String addBank() {
-        return "account";
+        return "redirect:/bankAccount";
     }*/
 }

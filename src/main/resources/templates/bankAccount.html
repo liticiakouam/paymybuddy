@@ -150,19 +150,19 @@
                         <div class="Page navigation example" th:if = "${totalPages > 1}" >
                             <ul class="pagination pagination-sm">
                                 <li class="page-item">
-                                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage - 1}}" class="page-link text-success">Previous</a>
-                                    <span class="page-link text-success" th:unless="${currentPage < totalPages}">Previous</span>
+                                    <a th:if="${currentPage - 1 != 0}" th:href="@{'/bankAccount?pageNo=' + ${currentPage - 1}}" class="page-link text-success">Previous</a>
+                                    <span class="page-link text-success" th:unless="${currentPage - 1 != 0}">Previous</span>
                                 </li>
                                 <li th:each="i: ${#numbers.sequence(1, totalPages)}" class="page-item">
-                                    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}" class="page-link text-success" href="#">[[${i}]]</a>
+                                    <a th:if="${currentPage != i}" th:href="@{'/bankAccount?pageNo=' +   ${i}}" class="page-link text-success" href="#">[[${i}]]</a>
                                     <a th:unless="${currentPage != i}" class="page-link text-dark" href="#">[[${i}]]</a>
                                 </li>
                                 <li class="page-item mr-2">
-                                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}" class="page-link text-success">Next</a>
+                                    <a th:if="${currentPage < totalPages}" th:href="@{'/bankAccount?pageNo=' + ${currentPage + 1}}" class="page-link text-success">Next</a>
                                     <span class="page-link text-success" th:unless="${currentPage < totalPages}">Next</span>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link text-success" th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}}">Last</a>
+                                    <a class="page-link text-success" th:if="${currentPage < totalPages}" th:href="@{'/bankAccount?pageNo=' + ${totalPages}}">Last</a>
                                     <span class="page-link text-success" th:unless="${currentPage < totalPages}">Last</span>
                                 </li>
                             </ul>

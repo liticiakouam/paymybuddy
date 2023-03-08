@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,6 +24,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public List<BankAccount> getAll() {
         return bankAccountRepository.findAll();
+
     }
 
     @Override
@@ -44,10 +44,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public Page<BankAccount> findPaginated(int pageNo, int pageSize) {
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return bankAccountRepository.findAll(pageable);
+    public Page<BankAccount> findPaginated(Pageable pageable) {
+        return bankAccountRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     @Override
