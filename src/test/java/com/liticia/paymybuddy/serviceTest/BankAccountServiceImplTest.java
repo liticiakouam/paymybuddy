@@ -1,4 +1,4 @@
-package com.liticia.paymybuddy.serviceImplTest;
+package com.liticia.paymybuddy.serviceTest;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
@@ -9,10 +9,17 @@ import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import com.liticia.paymybuddy.exception.BankAccountNotExist;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,7 +73,7 @@ public class BankAccountServiceImplTest {
     }
 
     @Test
-    void testShouldChangeExistingStatusOfTheBank() {
+    void testShouldChangeExistingStatusOfTheBankAccount() {
         BankAccount bankAccount = BankAccount.builder().id(1).active(true).build();
         bankAccount.setActive(!bankAccount.isActive());
 
@@ -78,4 +85,26 @@ public class BankAccountServiceImplTest {
         verify(bankAccountRepository, times(1)).save(bankAccount);
     }
 
+    @Test
+    void testShouldReturnBankAccountsOrderByCreatedAtDesc() throws ParseException {
+        Pageable pageable = PageRequest.of(1, 5);
+
+        String dateString = "03/12/2003";
+        Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+        String dateSg = "03/12/2010";
+        Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(dateSg);
+        List<BankAccount> bankAccounts = Arrays.asList(
+                BankAccount.builder().description("mtn").createdAt(date2).build(),
+                BankAccount.builder().description("momo").createdAt(date1).build()
+        );
+        Page<BankAccount> bankAccount = new PageImpl<>(bankAccounts);
+
+        when(bankAccountRepository.findAllByOrderByCreatedAtDesc(pageable)).thenReturn(bankAccount);
+
+        Page<BankAccount> paginated = bankAccountService.findPaginated(pageable);
+
+        assertEquals(2, paginated.getTotalElements());
+        assertEquals("mtn", paginated.getContent().get(0).getDescription());
+        verify(bankAccountRepository, times(1)).findAllByOrderByCreatedAtDesc(pageable);
+    }
 }
