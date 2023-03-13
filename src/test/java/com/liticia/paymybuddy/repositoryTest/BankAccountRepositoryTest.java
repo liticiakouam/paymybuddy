@@ -44,9 +44,12 @@ public class BankAccountRepositoryTest {
     }
 
     @Test
-    void testShouldBankAccountWithAnAccountNumber() {
+    void testShouldFindBankAccountWithAnAccountNumber() {
         Optional<BankAccount> accountNumber = bankAccountRepository.findByAccountNumber("IU12BONE");
         assertTrue(accountNumber.isPresent());
+
+        Optional<BankAccount> accountNumb = bankAccountRepository.findByAccountNumber("IU1222BONE");
+        assertTrue(accountNumb.isEmpty());
     }
 
     @Test
