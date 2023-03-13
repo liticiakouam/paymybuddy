@@ -3,7 +3,7 @@ package com.liticia.paymybuddy.controller;
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.liticia.paymybuddy.exception.AccountNumberAlreadyExist;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,7 +57,7 @@ public class BankAccountController {
            bankAccountService.save(bankAccountCreate);
            redirectAttributes.addFlashAttribute("saved", "The bankAccount is save!");
 
-        } catch (AccountNumberAlreadyExist e) {
+        } catch (BankAccountAlreadyExist e) {
             redirectAttributes.addFlashAttribute("message", "Sorry, a bank account with the account number already exist");
             model.addAttribute("bankAccounts", bankAccountService.getAll());
 

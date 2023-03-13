@@ -4,11 +4,10 @@ import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.liticia.paymybuddy.exception.AccountNumberAlreadyExist;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
+import com.liticia.paymybuddy.exception.BankAccountNotExist;
 import com.liticia.paymybuddy.security.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +17,23 @@ import java.util.Optional;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
-    @Autowired
-    private BankAccountRepository bankAccountRepository;
+
+    private final BankAccountRepository bankAccountRepository;
+
+    public BankAccountServiceImpl(BankAccountRepository bankAccountRepository) {
+        this.bankAccountRepository = bankAccountRepository;
+    }
 
     @Override
     public List<BankAccount> getAll() {
         return bankAccountRepository.findAll();
-
     }
 
     @Override
     public void save(BankAccountCreate bankAccountCreate) {
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(bankAccountCreate.getAccountNumber());
         if (optionalBankAccount.isPresent()) {
-            throw new AccountNumberAlreadyExist();
+            throw new BankAccountAlreadyExist();
         }
 
         BankAccount bankAccount = new BankAccount();
@@ -51,9 +53,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public void switchAccountStatus(int id) {
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findById(id);
-        //TODO: handle empty optionalBankAccount
         if (optionalBankAccount.isEmpty()) {
-            return;
+            throw new BankAccountNotExist();
         }
         BankAccount bankAccount = optionalBankAccount.get();
         bankAccount.setActive(!bankAccount.isActive());
