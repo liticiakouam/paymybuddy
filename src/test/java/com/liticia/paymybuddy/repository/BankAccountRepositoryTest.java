@@ -1,9 +1,7 @@
-package com.liticia.paymybuddy.repositoryTest;
+package com.liticia.paymybuddy.repository;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
-import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.sun.xml.bind.v2.TODO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

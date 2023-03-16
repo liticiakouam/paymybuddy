@@ -1,9 +1,8 @@
-package com.liticia.paymybuddy.controllerTest;
+package com.liticia.paymybuddy.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Service.BankAccountService;
-import com.liticia.paymybuddy.controller.BankAccountController;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
