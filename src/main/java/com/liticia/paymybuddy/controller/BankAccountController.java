@@ -28,20 +28,25 @@ public class BankAccountController {
             @RequestParam("pageNumber") int pageNumber,
             Model model
     ) {
+        BankAccountCreate bankAccount = new BankAccountCreate();
+        model.addAttribute("bankAccount", bankAccount);
+        return findPaginated(pageNumber, model);
+    }
+
+    private String findPaginated(@RequestParam("pageNumber") int pageNumber,
+            Model model
+    ) {
 
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
         Page <BankAccount> page = bankAccountService.findPaginated(pageable);
         List <BankAccount> bankAccounts = page.getContent();
-        BankAccountCreate bankAccount = new BankAccountCreate();
 
-        model.addAttribute("bankAccount", bankAccount);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("bankAccounts", bankAccounts);
-
         return "bankAccount";
     }
 
@@ -51,8 +56,7 @@ public class BankAccountController {
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("bankAccounts", bankAccountService.getAll());
-            return "bankAccount";
+            return findPaginated(1, model);
 
         } try {
            bankAccountService.save(bankAccountCreate);

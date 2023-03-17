@@ -62,7 +62,14 @@ public class BankAccountControllerTest {
     @Test
     public void testShouldReturnOkWhenCreatedBankAccount() throws Exception {
         BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("IU12UBA").description("UBA").build();
+        List<BankAccount> bankAccounts = Arrays.asList(
+                BankAccount.builder().description("mtn").build(),
+                BankAccount.builder().description("momo").build()
+        );
+        Pageable pageable = PageRequest.of(1, 5);
+        Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
+        when(bankAccountService.findPaginated(pageable)).thenReturn(page);
         doNothing().when(bankAccountService).save(bankAccountCreate);
 
         String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
@@ -77,8 +84,15 @@ public class BankAccountControllerTest {
     @Test
     public void testShouldReturnOkWhenExceptionThrow() throws Exception {
         BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("IU12UBA").description("UBA").build();
+        List<BankAccount> bankAccounts = Arrays.asList(
+                BankAccount.builder().description("mtn").build(),
+                BankAccount.builder().description("momo").build()
+        );
+        Pageable pageable = PageRequest.of(1, 5);
+        Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
         doThrow(BankAccountAlreadyExist.class).when(bankAccountService).save(bankAccountCreate);
+        when(bankAccountService.findPaginated(pageable)).thenReturn(page);
 
         String content = new ObjectMapper().writeValueAsString("IU12UBA");
         MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")
@@ -90,9 +104,15 @@ public class BankAccountControllerTest {
     @Test
     public void testShouldReturnAnswerWhenEmptyValue() throws Exception {
         BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("").description("UBA").build();
+        List<BankAccount> bankAccounts = Arrays.asList(
+                BankAccount.builder().description("mtn").build(),
+                BankAccount.builder().description("momo").build()
+        );
+        Pageable pageable = PageRequest.of(1, 5);
+        Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
+        when(bankAccountService.findPaginated(pageable)).thenReturn(page);
         doAnswer(invocation -> "please fill the value").when(bankAccountService).save(bankAccountCreate);
-        doThrow(BankAccountAlreadyExist.class).when(bankAccountService).save(bankAccountCreate);
 
         String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
         MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")
