@@ -56,8 +56,6 @@ public class BankAccountRepositoryTest {
         Pageable pageable = PageRequest.of(1, 2);
         Page<BankAccount> accountByCreatedAtDesc = bankAccountRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-//        TODO check the method findAllByOrderByCreatedAtDesc()
-//        assertEquals("IU15BONE", accountByCreatedAtDesc.getContent().get(0).getAccountNumber());
         assertEquals(5, accountByCreatedAtDesc.getTotalElements());
         assertEquals(3, accountByCreatedAtDesc.getTotalPages());
     }

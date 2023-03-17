@@ -53,6 +53,7 @@ public class BankAccountController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("bankAccounts", bankAccountService.getAll());
             return "bankAccount";
+
         } try {
            bankAccountService.save(bankAccountCreate);
            redirectAttributes.addFlashAttribute("saved", "The bankAccount is save!");

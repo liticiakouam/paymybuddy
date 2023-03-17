@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
+import com.liticia.paymybuddy.exception.BankAccountNotExist;
 import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,8 +23,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -66,6 +69,33 @@ public class BankAccountControllerTest {
         MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testShouldReturnOkWhenExceptionThrow() throws Exception {
+        BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("IU12UBA").description("UBA").build();
+
+        doThrow(BankAccountAlreadyExist.class).when(bankAccountService).save(bankAccountCreate);
+
+        String content = new ObjectMapper().writeValueAsString("IU12UBA");
+        MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testShouldReturnAnswerWhenEmptyValue() throws Exception {
+        BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("").description("UBA").build();
+
+        doAnswer(invocation -> "please fill the value").when(bankAccountService).save(bankAccountCreate);
+        doThrow(BankAccountAlreadyExist.class).when(bankAccountService).save(bankAccountCreate);
+
+        String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
+        MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")
                 .content(content);
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk());
