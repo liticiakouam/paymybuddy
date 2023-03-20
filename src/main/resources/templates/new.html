@@ -1,117 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>profile</title>
+    <meta charset="UTF-8">
+    <title>profile</title>
 
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
-  <link href="css/style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
 <nav class="navbar navbar-expand-md bg-white navbar-light  fixed-top">
-  <div class="container">
-    <a class="navbar-brand fw-italic" href="/index.html">
-      <span class="bg-success bg-gradient p-1 rounded-3 text-light">Pay My Buddy</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav text-truncate fw-bolder">
-        <li class="nav-item">
-          <a class="nav-link" href="home.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="transfer.html">Transfer</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link profile" href="profile.html">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">Log Out</a>
-        </li>
-      </ul>
+    <div class="container">
+        <a class="navbar-brand fw-italic" href="/index.html">
+            <span class="bg-success bg-gradient p-1 rounded-3 text-light">Pay My Buddy</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav text-truncate fw-bolder">
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="transfer.html">Transfer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link profile" href="profile.html">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Log Out</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
-<main id="main" class="main">
+<div id="main" class="main">
+    <div class="container">
+        <div class="pagetitle">
+            <h1>Profile</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="home.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="profile.html">Profile</a></li>
+                    <li class="breadcrumb-item active"><a href="account.html">Account</a></li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
 
-  <div class="pagetitle">
-    <h1>Profile</h1>
-    <nav>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="home.html">Home</a></li>
-        <li class="breadcrumb-item"><a href="profile.html">Profile</a></li>
-        <li class="breadcrumb-item active"><a href="account.html">Account</a></li>
-      </ol>
-    </nav>
-  </div><!-- End Page Title -->
-
-  <section class="section profile">
-    <div class="row">
-      <div class="col-xl-4">
-        <div class="card">
-          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-            <h6>
-              <a href="profile.html" >My profile</a>
-              <i class="bi bi-person-fill-add" style="font-size: 1rem; color: #45975c;"></i>
-            </h6>
-            <h6>
-              <a href="account.html" >My bank account</a>
-              <i class="bi bi-coin" style="font-size: 1rem; color: #45975c;"></i>
-            </h6>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xl-8">
-        <div class="card">
-          <div class="card-body">
-                  <div class="modal-body">
-                    <form th:action="@{/bankAccount/add}" method="POST" th:object="${bankAccount}" enctype="multipart/form-data">
-                      <div class="row mb-3">
-                        <input th:field="*{id}" type="hidden" class="form-control">
-                        <input th:field="*{userId}" type="hidden" class="form-control">
-                        <input th:field="*{status}" type="hidden" class="form-control">
-                        <input th:field="*{createdAt}" type="datetime-local" class="form-control">
-                        <label class="">Bank Name</label>
-                        <div class="align-items-center">
-                          <input th:field="*{description}" type="text" class="form-control">
-                        </div>
-                        <br>
-                        <br>
-
-                        <label class="">Your account number</label>
-                        <div class="align-items-center">
-                          <input th:field="*{accountNumber}" type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-success">Save changes</button>
+        <div class="row">
+            <div class="col-xl-3">
+                <div class="card">
+                    <div class="card-body profile-card d-flex flex-column">
+                        <h6>
+                            <i class="bi bi-person-fill-add" style="font-size: 1rem; color: #45975c;"></i>
+                            <a href="profile.html">My profile</a>
+                        </h6>
+                        <h6>
+                            <i class="bi bi-coin" style="font-size: 1rem; color: #45975c;"></i>
+                            <a href="account.html">My bank account</a>
+                        </h6>
                     </div>
-                    </form><!-- End General Form Elements -->
-                  </div>
+                </div>
+            </div>
 
-          </div>
+            <div class="col-xl-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="modal-body">
+                            <form th:action="@{/bankAccount}" method="POST" th:object="${bankAccount}"
+                                  enctype="multipart/form-data">
+                                <div class="row mb-3">
+                                    <label class="">Bank Name</label>
+                                    <div class="align-items-center">
+                                        <input th:field="*{description}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="">Your account number</label>
+                                    <div class="align-items-center">
+                                        <input th:field="*{accountNumber}" type="text" class="form-control"
+                                               aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <a th:href="@{/bankAccount}" type="button" class="btn btn-secondary">Back</a>
+                                <button type="submit" class="float-end btn btn-success">Save</button>
+                            </form><!-- End General Form Elements -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
-
-
-</main><!-- End #main -->
+</div><!-- End #main -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous">
@@ -255,6 +246,7 @@ h6 {
   color: #33f033;
   border-bottom: 2px solid #41f16d;
 }
+
 
 </style>
 </body>

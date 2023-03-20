@@ -1,4 +1,4 @@
-package com.liticia.paymybuddy.Controller;
+package com.liticia.paymybuddy.controller;
 
 import org.springframework.stereotype.Controller;
 

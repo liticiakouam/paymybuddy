@@ -56,23 +56,26 @@
 
     <section class="section profile">
         <div class="row">
-            <div class="col-xl-4">
+            <div class="col-xl-3 bg-white">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                    <div id="sidebar">
+                        <ul class="sidebar-nav" id="sidebar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="profile.html">
+                                    <i class="bi bi-grid"></i>
+                                    <span> My profil</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
 
-                <div class="card">
-                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                        <h6>
-                            <a href="profile.html" >My profile</a>
-                            <i class="bi bi-person-fill-add" style="font-size: 1rem; color: #45975c;"></i>
-                        </h6>
-                        <h6>
-                            <a href="account.html" >My bank account</a>
-                            <i class="bi bi-coin" style="font-size: 1rem; color: #45975c;"></i>
-                        </h6>
-
+                            <li class="nav-item">
+                                <a class="nav-content" href="account.html">
+                                    <i class="bi bi-menu-button-wide"></i>
+                                    <span> My Account</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+                        </ul>
                     </div>
                 </div>
-
             </div>
 
             <div class="col-xl-8">
@@ -336,6 +339,54 @@ h6 {
   background-color: #fff;
   color: #33f033;
   border-bottom: 2px solid #41f16d;
+}
+.sidebar-nav li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebar-nav .nav-link {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: #fff;
+  transition: 0.3;
+  font-weight: 600;
+
+  background: #0bb60ba8;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-family: "Nunito", sans-serif;
+}
+
+.sidebar-nav .nav-link i {
+  font-size: 16px;
+  margin-right: 10px;
+  color: #fff;
+}
+
+.sidebar-nav .nav-link:hover {
+  color: #0bb60ba8;
+  background: #fff;
+}
+.sidebar-nav .nav-link:hover i{
+  color: #0bb60ba8;
+}
+
+.sidebar-nav .nav-content {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 15px;
+  color: #11a70cc0;
+  font-family: "Nunito", sans-serif;
+  padding: 10px 15px;
+}
+.sidebar-nav .nav-content i {
+  font-size: 16px;
+  margin-right: 10px;
+  color: #11a70cc0;
 }
 
 </style>

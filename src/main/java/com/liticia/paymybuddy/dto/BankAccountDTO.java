@@ -15,7 +15,8 @@ public class BankAccountDTO {
     private  int userId;
 
     private String accountNumber;
-    private Boolean status;
+
+    private Boolean active;
 
     private String description;
 

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>profile</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+</head>
+<header>
+    <nav class="navbar navbar-expand-md bg-white navbar-light  fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-italic" href="/index.html">
+                <span class="bg-success bg-gradient p-1 rounded-3 text-light">Pay My Buddy</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav text-truncate fw-bolder">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="transfer.html">Transfer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link profile" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">LogOut</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<body style="background: #f6f9ff;">
+<div id="main" class="main">
+    <div class="container">
+        <div class="pagetitle" style=" margin-bottom: 10px; margin-top: 100px;">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="home.html">Home</a></li>
+                    <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="profile.html">Profile</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a class="text-success text-decoration-none" href="account.html">Account</a></li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <div class="row">
+            <div class="col-xl-3 bg-white ">
+                <div id="sidebar">
+                    <div class="card-body pt-4 pr-3 d-flex flex-column align-items-center">
+                        <ul class = "list-inline" id="sidebar-nav">
+                            <li class="">
+                                <a class="text-decoration-none text-secondary" href="profile.html">
+                                    <i class="bi bi-person-fill-add"></i>
+                                    <span> My profil</span>
+                                </a>
+                            </li>
+                            <li class="pt-3">
+                                <a class="btn btn-success" href="account.html">
+                                    <i class="bi bi-coin"></i>
+                                    <span> Bank Account</span>
+                                </a>
+                            </li>
+                        </ul>
+                     </div>
+                </div>
+            </div>
+
+            <div class="col-xl-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mt-4 mb-4">
+                            <h4 class="text-success">Bank Accounts</h4>
+                        </div>
+
+                        <div class="card">
+                            <div  class="card-body">
+                                <div class="row mt-2 mb-2">
+                                    <h5 class="text-dark">Add Bank Account</h5>
+                                </div>
+
+                                <div th:if="${saved}" class="mx-auto align items-center row alert alert-success alert-dismissible fade show" role="alert">
+                                    <span th:text="${saved}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+
+                                <div th:if="${message}" class="mx-auto row alert alert-danger alert-dismissible fade show" role="alert">
+                                    <span th:text="${message}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+
+                                <form class="row g-3" th:action="@{/bankAccount/add}" method="POST" th:object="${bankAccount}"
+                                      enctype="multipart/form-data">
+                                    <div class="col-md-5">
+                                        <input th:field="*{description}" type="text" class="form-control" placeholder="Description" required>
+                                        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"  class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-5" >
+                                        <input th:field="*{accountNumber}" type="text" class="form-control" placeholder="Account Number" required>
+                                        <span th:if="${#fields.hasErrors('accountNumber')}" th:errors="*{accountNumber}"  class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="float-end btn btn-success" type="submit">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <table class="mt-4 table table-hover">
+                            <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
+                            <tr>
+                                <th >Description </th>
+                                <th scope="col">Account Number</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"><span class="float-end">Action</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="bankAccount : ${bankAccounts}">
+                                <td th:text="${bankAccount.description}"></td>
+                                <td th:text="${bankAccount.accountNumber}"></td>
+                                <td>
+                                    <span th:if="${bankAccount.active == true}">Active</span>
+                                    <span th:unless="${bankAccount.active == true}">Inactive</span>
+                                </td>
+                                <td>
+                                    <a th:if="${bankAccount.active == true}"
+                                       th:href="@{/disable/{id}(id=${bankAccount.id})}"
+                                       class="text-decoration-none badge rounded-pill bg-danger float-end">Disable</a>
+                                    <a th:unless="${bankAccount.active == true}"
+                                       th:href="@{/disable/{id}(id=${bankAccount.id})}"
+                                       class="text-decoration-none badge rounded-pill bg-success float-end">Enable</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="Page navigation example" th:if = "${totalPages > 1}" >
+                            <ul class="pagination pagination-sm">
+                                <li class="page-item">
+                                    <a th:if="${currentPage - 1 != 0}" th:href="@{'/bankAccount?pageNumber=' + ${currentPage - 1}}" class="page-link text-success">Previous</a>
+                                    <span class="page-link text-success" th:unless="${currentPage - 1 != 0}">Previous</span>
+                                </li>
+                                <li th:each="i: ${#numbers.sequence(1, totalPages)}" class="page-item">
+                                    <a th:if="${currentPage != i}" th:href="@{'/bankAccount?pageNumber=' +   ${i}}" class="page-link text-success" href="#">[[${i}]]</a>
+                                    <a th:unless="${currentPage != i}" class="page-link text-dark" href="#">[[${i}]]</a>
+                                </li>
+                                <li class="page-item mr-2">
+                                    <a th:if="${currentPage < totalPages}" th:href="@{'/bankAccount?pageNumber=' + ${currentPage + 1}}" class="page-link text-success">Next</a>
+                                    <span class="page-link text-success" th:unless="${currentPage < totalPages}">Next</span>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link text-success" th:if="${currentPage < totalPages}" th:href="@{'/bankAccount?pageNumber=' + ${totalPages}}">Last</a>
+                                    <span class="page-link text-success" th:unless="${currentPage < totalPages}">Last</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous">
+</script>
+
+</body>
+</html>
