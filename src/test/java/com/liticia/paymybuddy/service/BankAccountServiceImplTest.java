@@ -14,8 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class BankAccountServiceImplTest {
@@ -59,22 +58,36 @@ public class BankAccountServiceImplTest {
 
     @Test
     void testShouldThrowExceptionWhenBankAccountNotExist() {
-        when(bankAccountRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThrows(BankAccountNotExist.class, ()->bankAccountService.switchAccountStatus(1));
+        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.empty());
+        assertThrows(BankAccountNotExist.class, ()->bankAccountService.switchAccountStatus("IU13BONE"));
 
-        verify(bankAccountRepository, times(1)).findById(1);
+        verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
     }
 
     @Test
     void testShouldChangeExistingStatusOfTheBankAccount() {
-        BankAccount bankAccount = BankAccount.builder().id(1).active(true).build();
+        BankAccount bankAccount = BankAccount.builder().accountNumber("IU13BONE").active(true).build();
         bankAccount.setActive(!bankAccount.isActive());
 
-        when(bankAccountRepository.findById(1)).thenReturn(Optional.of(bankAccount));
+        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(bankAccount));
         when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
 
-        bankAccountService.switchAccountStatus(1);
-        verify(bankAccountRepository, times(1)).findById(1);
+        bankAccountService.switchAccountStatus("IU13BONE");
+        verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
         verify(bankAccountRepository, times(1)).save(bankAccount);
+    }
+
+    @Test
+    void testShouldFindActiveBankAccount() {
+        List<BankAccount> list = Arrays.asList(
+                BankAccount.builder().active(true).build(),
+                BankAccount.builder().active(true).userId(1).build()
+        );
+        when(bankAccountRepository.findByActive(anyBoolean())).thenReturn(list);
+
+        List<BankAccount> activeBankAccounts = bankAccountService.findActiveAccountNumber(true);
+
+        assertEquals(2, activeBankAccounts.size());
+        verify(bankAccountRepository, times(1)).findByActive(true);
     }
 }

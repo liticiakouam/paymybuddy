@@ -61,15 +61,21 @@
                     <div class="card-body pt-4 pr-3 d-flex flex-column align-items-center">
                         <ul class = "list-inline" id="sidebar-nav">
                             <li class="">
-                                <a class="text-decoration-none text-secondary" href="profile.html">
+                                <a class="text-decoration-none text-dark" href="profile.html">
                                     <i class="bi bi-person-fill-add"></i>
                                     <span> My profil</span>
                                 </a>
                             </li>
                             <li class="pt-3">
-                                <a class="btn btn-success" href="account.html">
+                                <a class="btn btn-success" th:href="@{/bankAccount?pageNumber=1}" href="account.html">
                                     <i class="bi bi-coin"></i>
                                     <span> Bank Account</span>
+                                </a>
+                            </li>
+                            <li class="pt-3">
+                                <a class="text-decoration-none text-dark" th:href="@{/operation?pageNumber=1}" href="account.html">
+                                    <i class="bi bi-arrow-left-right"></i>
+                                    <span> Operation</span>
                                 </a>
                             </li>
                         </ul>
@@ -136,10 +142,10 @@
                                 </td>
                                 <td>
                                     <a th:if="${bankAccount.active == true}"
-                                       th:href="@{/disable/{id}(id=${bankAccount.id})}"
+                                       th:href="@{/disable/{accountNumber}(accountNumber=${bankAccount.accountNumber})}"
                                        class="text-decoration-none badge rounded-pill bg-danger float-end">Disable</a>
                                     <a th:unless="${bankAccount.active == true}"
-                                       th:href="@{/disable/{id}(id=${bankAccount.id})}"
+                                       th:href="@{/disable/{accountNumber}(accountNumber=${bankAccount.accountNumber})}"
                                        class="text-decoration-none badge rounded-pill bg-success float-end">Enable</a>
                                 </td>
                             </tr>
@@ -166,8 +172,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                </div>
+                        </div>
             </div>
         </div>
     </div>

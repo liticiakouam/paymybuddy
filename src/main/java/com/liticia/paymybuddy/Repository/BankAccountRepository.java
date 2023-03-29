@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Integer> {
     Optional<BankAccount> findByAccountNumber(String accountNumber);
+    List<BankAccount> findByActive(Boolean active);
     Page<BankAccount> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

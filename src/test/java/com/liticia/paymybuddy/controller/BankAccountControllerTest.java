@@ -66,10 +66,9 @@ public class BankAccountControllerTest {
                 BankAccount.builder().description("mtn").build(),
                 BankAccount.builder().description("momo").build()
         );
-        Pageable pageable = PageRequest.of(1, 5);
         Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
-        when(bankAccountService.findPaginated(pageable)).thenReturn(page);
+        when(bankAccountService.findPaginated(any())).thenReturn(page);
         doNothing().when(bankAccountService).save(bankAccountCreate);
 
         String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
@@ -88,13 +87,12 @@ public class BankAccountControllerTest {
                 BankAccount.builder().description("mtn").build(),
                 BankAccount.builder().description("momo").build()
         );
-        Pageable pageable = PageRequest.of(1, 5);
         Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
+        when(bankAccountService.findPaginated(any())).thenReturn(page);
         doThrow(BankAccountAlreadyExist.class).when(bankAccountService).save(bankAccountCreate);
-        when(bankAccountService.findPaginated(pageable)).thenReturn(page);
 
-        String content = new ObjectMapper().writeValueAsString("IU12UBA");
+        String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
         MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")
                 .content(content);
         mockMvc.perform(mockRequest)
@@ -108,10 +106,9 @@ public class BankAccountControllerTest {
                 BankAccount.builder().description("mtn").build(),
                 BankAccount.builder().description("momo").build()
         );
-        Pageable pageable = PageRequest.of(1, 5);
         Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
-        when(bankAccountService.findPaginated(pageable)).thenReturn(page);
+        when(bankAccountService.findPaginated(any())).thenReturn(page);
         doAnswer(invocation -> "please fill the value").when(bankAccountService).save(bankAccountCreate);
 
         String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
@@ -123,9 +120,9 @@ public class BankAccountControllerTest {
 
     @Test
     public void testShouldReturnFoundStatusWhenDisableBankAccount() throws Exception {
-        doNothing().when(bankAccountService).switchAccountStatus(21);
+        doNothing().when(bankAccountService).switchAccountStatus("iubonne2");
 
-        mockMvc.perform(get("/disable/21"))
+        mockMvc.perform(get("/disable/iubonne2"))
                 .andExpect(status().isFound());
     }
 

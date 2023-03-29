@@ -51,8 +51,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public void switchAccountStatus(int id) {
-        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findById(id);
+    public void switchAccountStatus(String accountNumber) {
+        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(accountNumber);
         if (optionalBankAccount.isEmpty()) {
             throw new BankAccountNotExist();
         }
@@ -60,5 +60,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccount.setActive(!bankAccount.isActive());
 
         bankAccountRepository.save(bankAccount);
+    }
+
+    @Override
+    public List<BankAccount> findActiveAccountNumber(Boolean active) {
+        List<BankAccount> accountList = bankAccountRepository.findByActive(active);
+        return accountList;
     }
 }

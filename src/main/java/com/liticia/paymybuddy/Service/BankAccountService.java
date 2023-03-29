@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface BankAccountService {
     List<BankAccount> getAll();
@@ -14,6 +15,8 @@ public interface BankAccountService {
     void save(BankAccountCreate bankAccountCreate);
 
     Page<BankAccount> findPaginated(Pageable pageable);
+    void switchAccountStatus(String accountNumber);
 
-    void switchAccountStatus(int id);
+    List<BankAccount> findActiveAccountNumber(Boolean active);
+
 }

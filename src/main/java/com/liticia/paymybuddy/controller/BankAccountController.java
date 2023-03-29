@@ -28,8 +28,7 @@ public class BankAccountController {
             @RequestParam("pageNumber") int pageNumber,
             Model model
     ) {
-        BankAccountCreate bankAccount = new BankAccountCreate();
-        model.addAttribute("bankAccount", bankAccount);
+        model.addAttribute("bankAccount", new BankAccountCreate());
         return findPaginated(pageNumber, model);
     }
 
@@ -60,7 +59,7 @@ public class BankAccountController {
 
         } try {
            bankAccountService.save(bankAccountCreate);
-           redirectAttributes.addFlashAttribute("saved", "The bankAccount is save!");
+           redirectAttributes.addFlashAttribute("saved", "New bank account " + bankAccountCreate.getAccountNumber() + " successfully save!");
 
         } catch (BankAccountAlreadyExist e) {
             redirectAttributes.addFlashAttribute("message", "Sorry, a bank account with the account number already exist");
@@ -72,9 +71,9 @@ public class BankAccountController {
         return "redirect:/bankAccount?pageNumber=1";
     }
 
-    @GetMapping("/disable/{id}")
-    public String updateBankAccount(@PathVariable int id) {
-        bankAccountService.switchAccountStatus(id);
+    @GetMapping("/disable/{accountNumber}")
+    public String updateBankAccount(@PathVariable String accountNumber) {
+        bankAccountService.switchAccountStatus(accountNumber);
         return "redirect:/bankAccount?pageNumber=1";
     }
 }

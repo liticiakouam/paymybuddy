@@ -1,12 +1,15 @@
 package com.liticia.paymybuddy.Entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.Date;
-import java.util.List;
 
+@Builder @NoArgsConstructor @AllArgsConstructor
 @Data
 @Entity
 public class Operation {
@@ -15,8 +18,18 @@ public class Operation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String operationType;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "accountNumber", referencedColumnName = "accountNumber")
+    private BankAccount bankAccount;
 
+    private  int userId;
+
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date operationDate;
+
+    private Double amount = 0.0;
 
 }
