@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface OperationService {
    List<Operation> getAll();
-   void save(OperationCreate operationCreate);
+   void saveCreditedAccount(OperationCreate operationCreate) throws Exception;
    Page<Operation> findPaginated(Pageable pageable);
-
 }

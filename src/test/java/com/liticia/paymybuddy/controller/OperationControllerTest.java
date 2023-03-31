@@ -6,16 +6,13 @@ import com.liticia.paymybuddy.Entity.Operation;
 import com.liticia.paymybuddy.Entity.OperationType;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.OperationService;
-import com.liticia.paymybuddy.dto.BankAccountCreate;
 import com.liticia.paymybuddy.dto.OperationCreate;
-import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -71,7 +68,7 @@ public class OperationControllerTest {
     public void testShouldReturnOkWhenCreatedOperation() throws Exception {
         OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
 
-        doNothing().when(operationService).save(operationCreate);
+        doNothing().when(operationService).saveCreditedAccount(operationCreate);
 
         String content = new ObjectMapper().writeValueAsString(operationCreate);
         MockHttpServletRequestBuilder mockRequest = post("/operation/add")

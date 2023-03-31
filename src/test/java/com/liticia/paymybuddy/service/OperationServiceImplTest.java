@@ -5,14 +5,10 @@ import com.liticia.paymybuddy.Entity.Operation;
 import com.liticia.paymybuddy.Entity.OperationType;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
 import com.liticia.paymybuddy.Repository.OperationRepository;
-import com.liticia.paymybuddy.Service.BankAccountService;
+import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.OperationService;
-import com.liticia.paymybuddy.Service.impl.BankAccountServiceImpl;
 import com.liticia.paymybuddy.Service.impl.OperationServiceImpl;
-import com.liticia.paymybuddy.dto.BankAccountCreate;
 import com.liticia.paymybuddy.dto.OperationCreate;
-import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
-import com.liticia.paymybuddy.exception.BankAccountNotExist;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -28,7 +24,8 @@ public class OperationServiceImplTest {
 
     private final BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
     private final OperationRepository operationRepository = Mockito.mock(OperationRepository.class);
-    private final OperationService operationService = new OperationServiceImpl(operationRepository, bankAccountRepository);
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final OperationService operationService = new OperationServiceImpl(operationRepository, bankAccountRepository, userRepository);
 
     @Test
     void testShouldReturnOperations() {
@@ -53,6 +50,6 @@ public class OperationServiceImplTest {
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
-        operationService.save(operationCreate);
+        operationService.saveCreditedAccount(operationCreate);
     }
 }

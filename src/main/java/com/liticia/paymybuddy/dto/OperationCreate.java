@@ -1,5 +1,6 @@
 package com.liticia.paymybuddy.dto;
 
+import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.OperationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

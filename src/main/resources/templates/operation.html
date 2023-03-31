@@ -95,8 +95,8 @@
                                 <h5 class="text-dark">Transaction</h5>
                             </div>
 
-                            <div th:if="${saved}" class="mx-auto align items-center row alert alert-success alert-dismissible fade show" role="alert">
-                                <span th:text="${saved}"></span>
+                            <div th:if="${operationFailed}" class="mx-auto align items-center row alert alert-danger alert-dismissible fade show" role="alert">
+                                <span th:text="${operationFailed}"></span>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
 

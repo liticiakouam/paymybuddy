@@ -1,17 +1,21 @@
 package com.liticia.paymybuddy.Service.impl;
 
-import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.Operation;
 import com.liticia.paymybuddy.Entity.OperationType;
+import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
 import com.liticia.paymybuddy.Repository.OperationRepository;
+import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
-import com.liticia.paymybuddy.exception.BankAccountNotExist;
+import com.liticia.paymybuddy.exception.OperationFailed;
+import com.liticia.paymybuddy.exception.UserNotExist;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -22,9 +26,12 @@ public class OperationServiceImpl implements OperationService {
     private final OperationRepository operationRepository;
     private final BankAccountRepository bankAccountRepository;
 
-    public OperationServiceImpl(OperationRepository operationRepository, BankAccountRepository bankAccountRepository) {
+    private final UserRepository userRepository;
+
+    public OperationServiceImpl(OperationRepository operationRepository, BankAccountRepository bankAccountRepository, UserRepository userRepository) {
         this.operationRepository = operationRepository;
         this.bankAccountRepository = bankAccountRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -33,28 +40,29 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void save(OperationCreate operationCreate) {
-        Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountNumber(operationCreate.getAccountNumber());
-        if (bankAccount.isEmpty()) {
-            throw new BankAccountNotExist();
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = OperationFailed.class)
+    public void saveCreditedAccount(OperationCreate operationCreate) throws Exception {
+        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        if(optionalUser.isEmpty()) {
+            throw new UserNotExist();
         }
-            Operation operation = Operation.builder().build();
+        User user = optionalUser.get();
 
-            if (operationCreate.getOperationType() == OperationType.CREDIT) {
-                operation.setOperationType(operationCreate.getOperationType());
-                operation.setAmount(operationCreate.getAmount() + operationCreate.getAmount());
-                operation.setId(SecurityUtils.getCurrentUserId());
-                operation.setBankAccount(bankAccount.get());
-                operation.setOperationDate(new Date());
-            }
-                operation.setOperationType(operationCreate.getOperationType());
-                operation.setAmount(operation.getAmount() - operationCreate.getAmount());
-                operation.setId(SecurityUtils.getCurrentUserId());
-                operation.setBankAccount(bankAccount.get());
-                operation.setOperationDate(new Date());
+        user.setBalance(user.getBalance() + operationCreate.getAmount());
+        userRepository.save(user);
 
+        Operation creditedOperation = Operation.builder().build();
+        if (operationCreate.getOperationType() == OperationType.CREDIT) {
+            creditedOperation.setOperationType(operationCreate.getOperationType());
+            creditedOperation.setAmount(operationCreate.getAmount());
+            creditedOperation.setUser(user);
+            creditedOperation.setBankAccount(bankAccountRepository.findByAccountNumber(operationCreate.getAccountNumber()).get());
+            creditedOperation.setOperationDate(new Date());
+        } else {
+            throw new OperationFailed();
+        }
 
-        operationRepository.save(operation);
+        operationRepository.save(creditedOperation);
     }
 
     @Override

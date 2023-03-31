@@ -1,11 +1,14 @@
 package com.liticia.paymybuddy.Service.impl;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
+import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
+import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
 import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import com.liticia.paymybuddy.exception.BankAccountNotExist;
+import com.liticia.paymybuddy.exception.UserNotExist;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +22,11 @@ import java.util.Optional;
 public class BankAccountServiceImpl implements BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
+    private final UserRepository userRepository;
 
-    public BankAccountServiceImpl(BankAccountRepository bankAccountRepository) {
+    public BankAccountServiceImpl(BankAccountRepository bankAccountRepository, UserRepository userRepository) {
         this.bankAccountRepository = bankAccountRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -36,11 +41,16 @@ public class BankAccountServiceImpl implements BankAccountService {
             throw new BankAccountAlreadyExist();
         }
 
+        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        if (optionalUser.isEmpty()) {
+            throw new UserNotExist();
+        }
+
         BankAccount bankAccount = new BankAccount();
         bankAccount.setDescription(bankAccountCreate.getDescription());
         bankAccount.setAccountNumber(bankAccountCreate.getAccountNumber());
         bankAccount.setCreatedAt(new Date());
-        bankAccount.setUserId(SecurityUtils.getCurrentUserId());
+        bankAccount.setUser(optionalUser.get());
 
         bankAccountRepository.save(bankAccount);
     }
@@ -64,7 +74,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public List<BankAccount> findActiveAccountNumber(Boolean active) {
-        List<BankAccount> accountList = bankAccountRepository.findByActive(active);
-        return accountList;
+        return bankAccountRepository.findByActive(active);
     }
 }

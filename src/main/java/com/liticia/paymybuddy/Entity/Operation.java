@@ -22,7 +22,9 @@ public class Operation {
     @JoinColumn(name = "accountNumber", referencedColumnName = "accountNumber")
     private BankAccount bankAccount;
 
-    private  int userId;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
@@ -30,6 +32,6 @@ public class Operation {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date operationDate;
 
-    private Double amount = 0.0;
+    private Double amount;
 
 }

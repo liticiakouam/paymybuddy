@@ -1,7 +1,9 @@
 package com.liticia.paymybuddy.service;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
+import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
+import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.impl.BankAccountServiceImpl;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
@@ -20,7 +22,8 @@ import static org.mockito.Mockito.*;
 public class BankAccountServiceImplTest {
 
     private final BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
-    private final BankAccountService bankAccountService = new BankAccountServiceImpl(bankAccountRepository);
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final BankAccountService bankAccountService = new BankAccountServiceImpl(bankAccountRepository, userRepository);
 
     @Test
     void testShouldReturnBankAccounts() {
@@ -81,7 +84,7 @@ public class BankAccountServiceImplTest {
     void testShouldFindActiveBankAccount() {
         List<BankAccount> list = Arrays.asList(
                 BankAccount.builder().active(true).build(),
-                BankAccount.builder().active(true).userId(1).build()
+                BankAccount.builder().active(true).user(User.builder().id(2).build()).build()
         );
         when(bankAccountRepository.findByActive(anyBoolean())).thenReturn(list);
 
