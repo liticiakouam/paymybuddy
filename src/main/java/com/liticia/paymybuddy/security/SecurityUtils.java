@@ -4,6 +4,6 @@ import com.liticia.paymybuddy.Entity.User;
 
 public class SecurityUtils {
     public static long getCurrentUserId() {
-        return 3;
+        return 2;
     }
 }
