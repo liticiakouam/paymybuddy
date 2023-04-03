@@ -6,7 +6,7 @@ import com.liticia.paymybuddy.Repository.BankAccountRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.liticia.paymybuddy.exception.BankAccountAlreadyExistException;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import com.liticia.paymybuddy.exception.BankAccountNotExistException;
 import com.liticia.paymybuddy.exception.UserNotExistException;
 import com.liticia.paymybuddy.security.SecurityUtils;
@@ -38,7 +38,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void save(BankAccountCreate bankAccountCreate) {
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(bankAccountCreate.getAccountNumber());
         if (optionalBankAccount.isPresent()) {
-            throw new BankAccountAlreadyExistException();
+            throw new BankAccountAlreadyExist();
         }
 
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());

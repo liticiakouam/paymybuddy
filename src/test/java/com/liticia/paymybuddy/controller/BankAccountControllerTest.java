@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.liticia.paymybuddy.exception.BankAccountAlreadyExistException;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -87,7 +87,7 @@ public class BankAccountControllerTest {
         Page<BankAccount> page = new PageImpl<>(bankAccounts);
 
         when(bankAccountService.findPaginated(any())).thenReturn(page);
-        doThrow(BankAccountAlreadyExistException.class).when(bankAccountService).save(bankAccountCreate);
+        doThrow(BankAccountAlreadyExist.class).when(bankAccountService).save(bankAccountCreate);
 
         String content = new ObjectMapper().writeValueAsString(bankAccountCreate);
         MockHttpServletRequestBuilder mockRequest = post("/bankAccount/add")

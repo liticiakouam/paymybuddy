@@ -54,16 +54,14 @@ public class OperationServiceImpl implements OperationService {
         Operation creditedOperation = Operation.builder().build();
         if (operationCreate.getOperationType() == OperationType.CREDIT) {
             creditedOperation.setOperationType(operationCreate.getOperationType());
-            creditedOperation.setAmount(operationCreate.getAmount());
+//            creditedOperation.setAmount(operationCreate.getAmount());
             creditedOperation.setUser(user);
             creditedOperation.setBankAccount(bankAccountRepository.findByAccountNumber(operationCreate.getAccountNumber()).get());
             creditedOperation.setOperationDate(new Date());
-        } else {
-            throw new OperationFailedException();
+            operationRepository.save(creditedOperation);
         }
+        throw new OperationFailedException();
 
-
-        operationRepository.save(creditedOperation);
     }
 
     @Override
