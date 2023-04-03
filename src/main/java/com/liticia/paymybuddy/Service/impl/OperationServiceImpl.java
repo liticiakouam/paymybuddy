@@ -9,7 +9,7 @@ import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
-import com.liticia.paymybuddy.exception.UserNotExistException;
+import com.liticia.paymybuddy.exception.UserNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ public class OperationServiceImpl implements OperationService {
     public void saveCreditedAccount(OperationCreate operationCreate) {
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if(optionalUser.isEmpty()) {
-            throw new UserNotExistException();
+            throw new UserNotFoundException();
         }
         User user = optionalUser.get();
 
@@ -68,7 +68,7 @@ public class OperationServiceImpl implements OperationService {
     public void saveDebitedAccount(OperationCreate operationCreate) {
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if(optionalUser.isEmpty()) {
-            throw new UserNotExistException();
+            throw new UserNotFoundException();
         }
         User user = optionalUser.get();
 

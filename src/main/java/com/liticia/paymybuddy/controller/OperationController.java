@@ -7,7 +7,7 @@ import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
-import com.liticia.paymybuddy.exception.UserNotExistException;
+import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,7 +70,7 @@ public class OperationController {
            redirectAttributes.addFlashAttribute("balanceError","Sorry,your balance is insufficient");
            model.addAttribute("operations", operationService.getAll());
            return "redirect:/operation?pageNumber=1";
-       } catch (UserNotExistException ex) {
+       } catch (UserNotFoundException ex) {
            redirectAttributes.addFlashAttribute("userNotFound","User not found, retry");
            model.addAttribute("operations", operationService.getAll());
        }
