@@ -3,6 +3,7 @@ package com.liticia.paymybuddy.service;
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.Operation;
 import com.liticia.paymybuddy.Entity.OperationType;
+import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
 import com.liticia.paymybuddy.Repository.OperationRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
@@ -41,12 +42,14 @@ public class OperationServiceImplTest {
     }
 
     @Test
-    void testShouldSaveOperation() {
+    void testShouldSaveOperation() throws Exception {
         OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
 
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
+        Operation operationU = Operation.builder().user(User.builder().id(1).build()).build();
 
+        when(operationRepository.findById(2L)).thenReturn(Optional.of(operationU));
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 

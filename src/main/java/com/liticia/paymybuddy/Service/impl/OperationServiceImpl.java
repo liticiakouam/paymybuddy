@@ -8,15 +8,15 @@ import com.liticia.paymybuddy.Repository.OperationRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
-import com.liticia.paymybuddy.exception.OperationFailed;
-import com.liticia.paymybuddy.exception.UserNotExist;
+import com.liticia.paymybuddy.exception.OperationFailedException;
+import com.liticia.paymybuddy.exception.UserNotExistException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,11 +40,11 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = OperationFailed.class)
-    public void saveCreditedAccount(OperationCreate operationCreate) throws Exception {
+    @Transactional
+    public void saveCreditedAccount(OperationCreate operationCreate) throws Exception, SQLIntegrityConstraintViolationException {
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if(optionalUser.isEmpty()) {
-            throw new UserNotExist();
+            throw new UserNotExistException();
         }
         User user = optionalUser.get();
 
@@ -59,8 +59,9 @@ public class OperationServiceImpl implements OperationService {
             creditedOperation.setBankAccount(bankAccountRepository.findByAccountNumber(operationCreate.getAccountNumber()).get());
             creditedOperation.setOperationDate(new Date());
         } else {
-            throw new OperationFailed();
+            throw new OperationFailedException();
         }
+
 
         operationRepository.save(creditedOperation);
     }

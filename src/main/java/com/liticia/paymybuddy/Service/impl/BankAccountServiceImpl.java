@@ -6,9 +6,9 @@ import com.liticia.paymybuddy.Repository.BankAccountRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
-import com.liticia.paymybuddy.exception.BankAccountNotExist;
-import com.liticia.paymybuddy.exception.UserNotExist;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExistException;
+import com.liticia.paymybuddy.exception.BankAccountNotExistException;
+import com.liticia.paymybuddy.exception.UserNotExistException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,12 +38,12 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void save(BankAccountCreate bankAccountCreate) {
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(bankAccountCreate.getAccountNumber());
         if (optionalBankAccount.isPresent()) {
-            throw new BankAccountAlreadyExist();
+            throw new BankAccountAlreadyExistException();
         }
 
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if (optionalUser.isEmpty()) {
-            throw new UserNotExist();
+            throw new UserNotExistException();
         }
 
         BankAccount bankAccount = new BankAccount();
@@ -64,7 +64,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void switchAccountStatus(String accountNumber) {
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(accountNumber);
         if (optionalBankAccount.isEmpty()) {
-            throw new BankAccountNotExist();
+            throw new BankAccountNotExistException();
         }
         BankAccount bankAccount = optionalBankAccount.get();
         bankAccount.setActive(!bankAccount.isActive());

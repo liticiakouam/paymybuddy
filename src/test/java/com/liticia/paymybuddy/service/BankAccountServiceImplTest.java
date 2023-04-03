@@ -7,8 +7,8 @@ import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.impl.BankAccountServiceImpl;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
-import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
-import com.liticia.paymybuddy.exception.BankAccountNotExist;
+import com.liticia.paymybuddy.exception.BankAccountAlreadyExistException;
+import com.liticia.paymybuddy.exception.BankAccountNotExistException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -43,7 +43,7 @@ public class BankAccountServiceImplTest {
         BankAccount bankAccount = BankAccount.builder().accountNumber("IU13BONE").build();
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(bankAccount));
 
-        assertThrows(BankAccountAlreadyExist.class, ()->bankAccountService.save(BankAccountCreate.builder().accountNumber("IU13BONE").build()));
+        assertThrows(BankAccountAlreadyExistException.class, ()->bankAccountService.save(BankAccountCreate.builder().accountNumber("IU13BONE").build()));
 
         verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
     }
@@ -62,7 +62,7 @@ public class BankAccountServiceImplTest {
     @Test
     void testShouldThrowExceptionWhenBankAccountNotExist() {
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.empty());
-        assertThrows(BankAccountNotExist.class, ()->bankAccountService.switchAccountStatus("IU13BONE"));
+        assertThrows(BankAccountNotExistException.class, ()->bankAccountService.switchAccountStatus("IU13BONE"));
 
         verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
     }
