@@ -8,7 +8,7 @@ import com.liticia.paymybuddy.Repository.OperationRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
-import com.liticia.paymybuddy.exception.OperationFailedException;
+import com.liticia.paymybuddy.exception.InsufficientBalanceException;
 import com.liticia.paymybuddy.exception.UserNotExistException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +40,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     @Transactional
-    public void saveCreditedAccount(OperationCreate operationCreate) throws Exception, SQLIntegrityConstraintViolationException {
+    public void saveCreditedAccount(OperationCreate operationCreate) {
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if(optionalUser.isEmpty()) {
             throw new UserNotExistException();
@@ -58,9 +57,37 @@ public class OperationServiceImpl implements OperationService {
             creditedOperation.setUser(user);
             creditedOperation.setBankAccount(bankAccountRepository.findByAccountNumber(operationCreate.getAccountNumber()).get());
             creditedOperation.setOperationDate(new Date());
-            operationRepository.save(creditedOperation);
         }
-        throw new OperationFailedException();
+        operationRepository.save(creditedOperation);
+
+
+    }
+
+    @Override
+    @Transactional
+    public void saveDebitedAccount(OperationCreate operationCreate) {
+        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        if(optionalUser.isEmpty()) {
+            throw new UserNotExistException();
+        }
+        User user = optionalUser.get();
+
+        if (user.getBalance() < operationCreate.getAmount()) {
+            throw new InsufficientBalanceException();
+        }
+        user.setBalance(user.getBalance() - operationCreate.getAmount());
+        userRepository.save(user);
+
+        Operation debitedOperation = Operation.builder().build();
+        if (operationCreate.getOperationType() == OperationType.DEBIT) {
+            debitedOperation.setOperationType(operationCreate.getOperationType());
+            debitedOperation.setAmount(operationCreate.getAmount());
+            debitedOperation.setUser(user);
+            debitedOperation.setBankAccount(bankAccountRepository.findByAccountNumber(operationCreate.getAccountNumber()).get());
+            debitedOperation.setOperationDate(new Date());
+        }
+        operationRepository.save(debitedOperation);
+
 
     }
 

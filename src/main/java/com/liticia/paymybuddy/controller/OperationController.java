@@ -2,10 +2,12 @@ package com.liticia.paymybuddy.controller;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.Operation;
+import com.liticia.paymybuddy.Entity.OperationType;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
-import com.liticia.paymybuddy.exception.OperationFailedException;
+import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.exception.UserNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,14 +57,22 @@ public class OperationController {
 
     @PostMapping("/operation/add")
     public String postOperation(@ModelAttribute("operation") OperationCreate operationCreate, Model model,
-                                RedirectAttributes redirectAttributes) throws Exception {
+                                RedirectAttributes redirectAttributes) {
        try {
-           operationService.saveCreditedAccount(operationCreate);
-           redirectAttributes.addFlashAttribute("saved", "Operation successfully save!");
-       } catch (OperationFailedException ex) {
-           redirectAttributes.addFlashAttribute("operationFailed","Sorry an error has occurred, the operation cannot be completed");
+           if (operationCreate.getOperationType() == OperationType.CREDIT){
+               operationService.saveCreditedAccount(operationCreate);
+               redirectAttributes.addFlashAttribute("credit", "Account successfully credited!");
+           }
+           operationService.saveDebitedAccount(operationCreate);
+           redirectAttributes.addFlashAttribute("debit", "Account successfully debited!");
+
+      } catch (InsufficientBalanceException ex) {
+           redirectAttributes.addFlashAttribute("balanceError","Sorry,your balance is insufficient");
            model.addAttribute("operations", operationService.getAll());
            return "redirect:/operation?pageNumber=1";
+       } catch (UserNotExistException ex) {
+           redirectAttributes.addFlashAttribute("userNotFound","User not found, retry");
+           model.addAttribute("operations", operationService.getAll());
        }
 
        return "redirect:/operation?pageNumber=1";
