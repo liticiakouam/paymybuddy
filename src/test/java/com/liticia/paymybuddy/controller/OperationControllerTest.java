@@ -7,6 +7,8 @@ import com.liticia.paymybuddy.Entity.OperationType;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
+import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -69,6 +71,36 @@ public class OperationControllerTest {
         OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
 
         doNothing().when(operationService).saveCreditedAccount(operationCreate);
+
+        String content = new ObjectMapper().writeValueAsString(operationCreate);
+        MockHttpServletRequestBuilder mockRequest = post("/operation/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    public void testShouldThrowUserNortFoundException() throws Exception {
+        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
+
+        doThrow(UserNotFoundException.class).when(operationService).saveCreditedAccount(operationCreate);
+
+        String content = new ObjectMapper().writeValueAsString(operationCreate);
+        MockHttpServletRequestBuilder mockRequest = post("/operation/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    public void testShouldThrowInsufficientBalanceException() throws Exception {
+        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
+
+        doThrow(InsufficientBalanceException.class).when(operationService).saveDebitedAccount(operationCreate);
 
         String content = new ObjectMapper().writeValueAsString(operationCreate);
         MockHttpServletRequestBuilder mockRequest = post("/operation/add")

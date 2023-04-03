@@ -11,6 +11,7 @@ import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import com.liticia.paymybuddy.exception.BankAccountNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,9 +52,11 @@ public class BankAccountServiceImplTest {
     @Test
     void testShouldSaveBankAccount() {
         BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("IU22BONE").build();
+        User user = User.builder().id(2L).balance(2000.0).build();
 
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountNumber(bankAccountCreate.getAccountNumber());
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
         when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
 
         bankAccountService.save(bankAccountCreate);

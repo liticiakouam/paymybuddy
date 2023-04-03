@@ -10,6 +10,8 @@ import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.Service.impl.OperationServiceImpl;
 import com.liticia.paymybuddy.dto.OperationCreate;
+import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -42,17 +44,61 @@ public class OperationServiceImplTest {
     }
 
     @Test
-    void testShouldSaveOperation() throws Exception {
+    void testShouldSaveCreditedOperation()  {
         OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
+        User user = User.builder().id(2L).balance(2000.0).build();
 
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
-        Operation operationU = Operation.builder().user(User.builder().id(1).build()).build();
 
-        when(operationRepository.findById(2L)).thenReturn(Optional.of(operationU));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
         operationService.saveCreditedAccount(operationCreate);
+    }
+
+    @Test
+    void testShouldSavedebitedOperation()  {
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(100000.0).build();
+        User user = User.builder().id(2L).balance(200000.0).build();
+
+        Operation operation = new Operation();
+        operation.setAmount(operationCreate.getAmount());
+
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        when(operationRepository.save(operation)).thenReturn(operation);
+
+        operationService.saveDebitedAccount(operationCreate);
+        assertEquals(100000.0, operation.getAmount());
+    }
+
+    @Test
+    void testShouldThrowExceptionWhenInsufficientBalance()  {
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
+        User user = User.builder().id(2L).balance(2000.0).build();
+
+        Operation operation = new Operation();
+        operation.setAmount(operationCreate.getAmount());
+
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        when(operationRepository.save(operation)).thenReturn(operation);
+
+        assertThrows(InsufficientBalanceException.class, ()->operationService.saveDebitedAccount(operationCreate));
+    }
+
+    @Test
+    void testShouldThrowExceptionWhenThereIsNoUser()  {
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
+
+        Operation operation = new Operation();
+        operation.setAmount(operationCreate.getAmount());
+
+        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        when(operationRepository.save(operation)).thenReturn(operation);
+
+        assertThrows(UserNotFoundException.class, ()->operationService.saveCreditedAccount(operationCreate));
     }
 }
