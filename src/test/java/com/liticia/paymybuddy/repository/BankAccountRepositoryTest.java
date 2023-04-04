@@ -60,4 +60,12 @@ public class BankAccountRepositoryTest {
         assertEquals(3, accountByCreatedAtDesc.getTotalPages());
     }
 
+    @Test
+    void testShouldReturnActiveBankAccounts() {
+        List<BankAccount> bankAccounts = bankAccountRepository.findByActive(true);
+
+        assertEquals(3, bankAccounts.size());
+        assertEquals("IU13BONE", bankAccounts.get(0).getAccountNumber());
+    }
+
 }

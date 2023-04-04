@@ -18,7 +18,7 @@ import java.util.Date;
 public class BankAccountCreate {
     @Length(min = 7, message = "the minimum value is 7")
     @NotBlank(message = "please fill the column")
-    @Column(unique=true)
+    @Column(unique = true)
     private String accountNumber;
 
     @Length(min = 3, message = "the minimum value is 3")

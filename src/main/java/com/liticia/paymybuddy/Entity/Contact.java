@@ -13,7 +13,10 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private long idPrincipalUser;
+
     private long idContactUser;
+
     private Date date;
 }

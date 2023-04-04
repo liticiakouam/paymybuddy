@@ -23,14 +23,13 @@ import java.util.List;
 public class BankAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private String accountNumber;
 
-    private  int userId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private  User user;
 
     private boolean active = true;
-
-    private String accountNumber;
 
     private String description;
 
