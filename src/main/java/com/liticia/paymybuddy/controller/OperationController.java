@@ -6,7 +6,9 @@ import com.liticia.paymybuddy.Entity.OperationType;
 import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
+import com.liticia.paymybuddy.exception.BankAccountNotFoundException;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.exception.NotSupportedOperationException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,21 +33,18 @@ public class OperationController {
     private BankAccountService bankAccountService;
 
     @GetMapping("/operation")
-    public String getOperations(@RequestParam("pageNumber") int pageNumber,
-                                Model model) {
+    public String getOperations(@RequestParam("pageNumber") int pageNumber, Model model) {
         model.addAttribute("operation", new OperationCreate());
         return findPaginated(pageNumber, model);
     }
 
-    private String findPaginated(@RequestParam("pageNumber") int pageNumber,
-                                 Model model) {
-
+    private String findPaginated(@RequestParam("pageNumber") int pageNumber, Model model) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
         Page<Operation> page = operationService.findPaginated(pageable);
         List<Operation> operations = page.getContent();
-        List<BankAccount> bankAccounts = bankAccountService.findActiveAccountNumber(true);
+        List<BankAccount> bankAccounts = bankAccountService.findActiveBankAccount();
 
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -56,22 +55,33 @@ public class OperationController {
     }
 
     @PostMapping("/operation/add")
-    public String postOperation(@ModelAttribute("operation") OperationCreate operationCreate, Model model,
-                                RedirectAttributes redirectAttributes) {
+    public String postOperation(
+            @ModelAttribute("operation") OperationCreate operationCreate,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
        try {
-           if (operationCreate.getOperationType() == OperationType.CREDIT){
-               operationService.saveCreditedAccount(operationCreate);
+           if (operationCreate.getOperationType() == OperationType.CREDIT) {
+               operationService.creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
                redirectAttributes.addFlashAttribute("credit", "Account successfully credited!");
+           } else if(operationCreate.getOperationType() == OperationType.DEBIT) {
+               operationService.debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
+               redirectAttributes.addFlashAttribute("debit", "Account successfully debited!");
+           } else {
+               throw new NotSupportedOperationException();
            }
-           operationService.saveDebitedAccount(operationCreate);
-           redirectAttributes.addFlashAttribute("debit", "Account successfully debited!");
-
-      } catch (InsufficientBalanceException ex) {
-           redirectAttributes.addFlashAttribute("balanceError","Sorry,your balance is insufficient");
+       } catch (InsufficientBalanceException ex) {
+           redirectAttributes.addFlashAttribute("balanceError","Sorry, your balance is insufficient");
            model.addAttribute("operations", operationService.getAll());
            return "redirect:/operation?pageNumber=1";
        } catch (UserNotFoundException ex) {
            redirectAttributes.addFlashAttribute("userNotFound","User not found, retry");
+           model.addAttribute("operations", operationService.getAll());
+       } catch (NotSupportedOperationException ex) {
+           redirectAttributes.addFlashAttribute("operationNotSupported","Sorry, thi operation is not supported");
+           model.addAttribute("operations", operationService.getAll());
+       } catch (BankAccountNotFoundException ex) {
+           redirectAttributes.addFlashAttribute("NoBankAccount","Bank account not found, retry");
            model.addAttribute("operations", operationService.getAll());
        }
 

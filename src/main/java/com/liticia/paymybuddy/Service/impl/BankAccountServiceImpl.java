@@ -73,7 +73,12 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public List<BankAccount> findActiveAccountNumber(Boolean active) {
-        return bankAccountRepository.findByActive(active);
+    public List<BankAccount> findActiveBankAccount() {
+        return bankAccountRepository.findByActive(true);
+    }
+
+    @Override
+    public Optional<BankAccount> findBankAccount(String accounNumber) {
+        return bankAccountRepository.findByAccountNumber(accounNumber);
     }
 }

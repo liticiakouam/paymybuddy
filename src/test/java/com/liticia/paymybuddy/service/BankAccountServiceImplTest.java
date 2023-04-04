@@ -11,7 +11,6 @@ import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import com.liticia.paymybuddy.exception.BankAccountNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -91,7 +90,7 @@ public class BankAccountServiceImplTest {
         );
         when(bankAccountRepository.findByActive(anyBoolean())).thenReturn(list);
 
-        List<BankAccount> activeBankAccounts = bankAccountService.findActiveAccountNumber(true);
+        List<BankAccount> activeBankAccounts = bankAccountService.findActiveBankAccount();
 
         assertEquals(2, activeBankAccounts.size());
         verify(bankAccountRepository, times(1)).findByActive(true);

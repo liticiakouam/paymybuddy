@@ -55,7 +55,7 @@ public class OperationServiceImplTest {
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
-        operationService.saveCreditedAccount(operationCreate);
+        operationService.creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class OperationServiceImplTest {
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
-        operationService.saveDebitedAccount(operationCreate);
+        operationService.debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
         assertEquals(100000.0, operation.getAmount());
     }
 
@@ -86,7 +86,7 @@ public class OperationServiceImplTest {
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
-        assertThrows(InsufficientBalanceException.class, ()->operationService.saveDebitedAccount(operationCreate));
+        assertThrows(InsufficientBalanceException.class, ()->operationService.debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber()));
     }
 
     @Test
@@ -99,6 +99,6 @@ public class OperationServiceImplTest {
         when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
-        assertThrows(UserNotFoundException.class, ()->operationService.saveCreditedAccount(operationCreate));
+        assertThrows(UserNotFoundException.class, ()->operationService.creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber()));
     }
 }

@@ -52,7 +52,7 @@ public class OperationControllerTest {
         Page<Operation> page = new PageImpl<>(operations);
 
         when(operationService.findPaginated(any(Pageable.class))).thenReturn(page);
-        when(bankAccountService.findActiveAccountNumber(true)).thenReturn(bankAccounts);
+        when(bankAccountService.findActiveBankAccount()).thenReturn(bankAccounts);
 
          mockMvc.perform(get("/operation?pageNumber=1"))
                 .andExpect(status().isOk())
@@ -70,7 +70,7 @@ public class OperationControllerTest {
     public void testShouldReturnOkWhenCreatedOperation() throws Exception {
         OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
 
-        doNothing().when(operationService).saveCreditedAccount(operationCreate);
+        doNothing().when(operationService).creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
 
         String content = new ObjectMapper().writeValueAsString(operationCreate);
         MockHttpServletRequestBuilder mockRequest = post("/operation/add")
@@ -85,7 +85,7 @@ public class OperationControllerTest {
     public void testShouldThrowUserNortFoundException() throws Exception {
         OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
 
-        doThrow(UserNotFoundException.class).when(operationService).saveCreditedAccount(operationCreate);
+        doThrow(UserNotFoundException.class).when(operationService).creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
 
         String content = new ObjectMapper().writeValueAsString(operationCreate);
         MockHttpServletRequestBuilder mockRequest = post("/operation/add")
@@ -100,7 +100,7 @@ public class OperationControllerTest {
     public void testShouldThrowInsufficientBalanceException() throws Exception {
         OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
 
-        doThrow(InsufficientBalanceException.class).when(operationService).saveDebitedAccount(operationCreate);
+        doThrow(InsufficientBalanceException.class).when(operationService).debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
 
         String content = new ObjectMapper().writeValueAsString(operationCreate);
         MockHttpServletRequestBuilder mockRequest = post("/operation/add")
