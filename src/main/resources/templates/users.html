@@ -73,7 +73,8 @@
         <table class="table table-hover">
           <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
           <tr class="bg-light">
-            <th scope="col">Name</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
             <th scope="col">Email Address</th>
             <th scope="col">Action</th>
           </tr>
@@ -81,6 +82,7 @@
           <tbody>
           <tr th:each="user : ${users}">
             <td th:text="${user.firstname}"></td>
+            <td th:text="${user.lastname}"></td>
             <td class="align center" th:text="${user.email}"></td>
             <td>
               <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
