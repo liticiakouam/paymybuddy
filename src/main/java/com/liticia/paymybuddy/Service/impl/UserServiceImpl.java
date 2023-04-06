@@ -6,18 +6,13 @@ import com.liticia.paymybuddy.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Override
-    public void save(User user) {
-        userRepository.save(user);
+    private final UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -26,13 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> searchByFirstnameOrLastname(String firstname, String lastname) {
-        List<User> users = userRepository.findByFirstnameOrLastname(firstname, lastname);
-
-        if (users.size() > 0) {
-            return users;
-        } else {
-            return new ArrayList<>();
-        }
+    public List<User> search(String keyword) {
+        return userRepository.findByFirstnameContainingOrLastnameContaining(keyword, keyword);
     }
 }
