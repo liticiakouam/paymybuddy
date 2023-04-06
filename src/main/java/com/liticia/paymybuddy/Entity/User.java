@@ -14,7 +14,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-@Table(name = "users")
 public class User {
 
     @Id
@@ -34,4 +33,5 @@ public class User {
     private Date createdAt;
 
     private Date updatedAt;
+
 }

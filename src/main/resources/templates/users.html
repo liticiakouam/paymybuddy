@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>profile</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+</head>
+<header>
+  <nav class="navbar navbar-expand-md bg-white navbar-light  fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-italic" href="/index.html">
+        <span class="bg-success bg-gradient p-1 rounded-3 text-light">Pay My Buddy</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav text-truncate fw-bolder">
+          <li class="nav-item">
+            <a class="nav-link" href="home.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="transfer.html">Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link profile" href="profile.html">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">LogOut</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<body style="background: #f6f9ff;">
+<div class="container">
+  <div class="pagetitle" style=" margin-bottom: 30px; margin-top: 100px;">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="home.html">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="profile.html">Profile</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a class="text-success text-decoration-none" href="account.html">Account</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="mb-4">
+      <div class="float-start flex-column gap-4">
+        <form class="d-flex" th:action="@{/users/search/{keyword}}" method="GET" th:object="${user}">
+          <input name="keyword" class="form-control me-1 ps-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-success" type="submit">
+            <i class="bi bi-person-fill-add"></i>
+          </button>
+        </form>
+      </div>
+
+      <button class="btn btn-success float-end">Show Contact</button>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="text-success float-start mb-4">Users</h4>
+
+        <table class="table table-hover">
+          <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
+          <tr class="bg-light">
+            <th scope="col">Name</th>
+            <th scope="col">Email Address</th>
+            <th scope="col">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.firstname}"></td>
+            <td class="align center" th:text="${user.email}"></td>
+            <td>
+              <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
+            </td>
+          </tr>
+          </tbody>
+          <div th:if="${size > 0}">
+            <tbody>
+            <tr th:each="user : ${searchUsers}">
+              <td th:text="${user.firstname}"></td>
+              <td class="align center" th:text="${user.email}"></td>
+              <td>
+                <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
+              </td>
+            </tr>
+            </tbody>
+          </div>
+
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous">
+  </script>
+</body>
+<style>
+    .card {
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 0 30px rgba(1, 42, 112, 0.062);
+    }
+</style>
+</html>

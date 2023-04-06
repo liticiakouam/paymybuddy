@@ -23,7 +23,7 @@ public class BankAccountController {
     @Autowired
     private BankAccountService bankAccountService;
 
-    @GetMapping("/bankAccount")//http://localhost:8080/bankAccount?pageNo=1
+    @GetMapping("/bankAccount")//http://localhost:8080/bankAccount?pageNumber=1
     public String getBankAccount(
             @RequestParam("pageNumber") int pageNumber,
             Model model
