@@ -28,9 +28,9 @@ public class UserController {
     @GetMapping("/users/search/{keyword}")
     public String getUserByFirstOrLastName (@PathVariable String keyword, Model model) {
         List<User> users = userService.searchByFirstnameOrLastname(keyword, keyword);
-        int size = users.size();
+        int userSize = users.size();
         model.addAttribute("searchUsers", users);
-        model.addAttribute("size", size);
+        model.addAttribute("size", userSize);
 
         return "users";
     }
