@@ -35,17 +35,4 @@ public class UserController {
         return "users";
     }
 
-  /*  @PostMapping("/register")
-    public String postUserAdd(@ModelAttribute("user") UserDTO userDTO) {
-
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setFirstname(userDTO.getFirstname());
-        user.setLastname(userDTO.getLastname());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-
-        userService.save(user);
-        return "redirect:/home";
-    }*/
 }
