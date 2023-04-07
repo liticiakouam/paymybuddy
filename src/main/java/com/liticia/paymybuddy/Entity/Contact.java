@@ -12,11 +12,16 @@ public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "contact_id")
     private long id;
 
-    private long idPrincipalUser;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "principal_user", referencedColumnName = "id")
+    private User user;
 
-    private long idContactUser;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "friend_user", referencedColumnName = "id")
+    private User userFriend;
 
-    private Date date;
+    private Date createdAt;
 }

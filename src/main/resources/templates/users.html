@@ -90,7 +90,7 @@
             <td th:text="${user.lastname}"></td>
             <td class="align center" th:text="${user.email}"></td>
             <td>
-              <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
+              <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${contactCreated.friendId})}">Add</a>
             </td>
           </tr>
           </tbody>
@@ -101,7 +101,7 @@
               <td th:text="${user.lastname}"></td>
               <td class="align center" th:text="${user.email}"></td>
               <td>
-                <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
+                <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${contactCreated.friendId})}">Add</a>
               </td>
             </tr>
             </tbody>
