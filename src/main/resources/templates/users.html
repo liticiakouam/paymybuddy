@@ -75,6 +75,21 @@
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
+        <div th:if="${userExist}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${userExist}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${userAdd}" class="mx-auto float-end alert alert-success alert-dismissible fade show" role="alert">
+          <span th:text="${userAdd}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${userNotFound}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${userNotFound}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <table class="table table-hover">
           <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
           <tr class="bg-light">
@@ -90,7 +105,7 @@
             <td th:text="${user.lastname}"></td>
             <td class="align center" th:text="${user.email}"></td>
             <td>
-              <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${contactCreated.friendId})}">Add</a>
+              <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${user.id})}">Add</a>
             </td>
           </tr>
           </tbody>
@@ -101,7 +116,7 @@
               <td th:text="${user.lastname}"></td>
               <td class="align center" th:text="${user.email}"></td>
               <td>
-                <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${contactCreated.friendId})}">Add</a>
+                <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${user.id})}">Add</a>
               </td>
             </tr>
             </tbody>

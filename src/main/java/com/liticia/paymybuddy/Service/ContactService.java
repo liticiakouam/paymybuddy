@@ -7,5 +7,5 @@ import com.liticia.paymybuddy.dto.ContactCreated;
 import java.util.List;
 
 public interface ContactService {
-    void save(ContactCreated contactCreated);
+    void save(long friendId);
 }

@@ -6,11 +6,13 @@ import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.ContactService;
 import com.liticia.paymybuddy.dto.ContactCreated;
+import com.liticia.paymybuddy.exception.UserAlreadyExistException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,11 +27,15 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public void save(ContactCreated contactCreated) {
-        Optional<User> friendUser = userRepository.findById(contactCreated.getFriendId());
+    public void save(long friendId) {
+        Optional<User> friendUser = userRepository.findById(friendId);
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        List<Contact> optionalContact = contactRepository.findByUserFriend(friendUser.get());
 
-        if (friendUser  .isEmpty()) {
+        if (optionalContact.size() > 0) {
+            throw new UserAlreadyExistException();
+        }
+        if (friendUser.isEmpty()) {
             throw new UserNotFoundException();
         }
         if (optionalUser.isEmpty()) {

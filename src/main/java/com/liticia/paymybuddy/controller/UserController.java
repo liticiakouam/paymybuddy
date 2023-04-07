@@ -18,11 +18,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public String getUsers (Model model) {
+    public void getUsers (Model model) {
         model.addAttribute("users", userService.getAll());
         model.addAttribute("contactCreated", new ContactCreated());
         model.addAttribute("user", new User());
-        return "users";
     }
 
     @GetMapping("/users/search")
