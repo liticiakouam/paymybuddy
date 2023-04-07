@@ -35,9 +35,6 @@ public class ContactServiceImpl implements ContactService {
         if (optionalContact.size() > 0) {
             throw new UserAlreadyExistException();
         }
-        if (friendUser.isEmpty()) {
-            throw new UserNotFoundException();
-        }
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
         }

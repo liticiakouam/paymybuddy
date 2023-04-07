@@ -36,14 +36,14 @@ public class ContactController {
             redirectAttributes.addFlashAttribute("userExist", "This user is already your friend");
             model.addAttribute("user", new User());
 
-            return "redirect:/users";
+            return "redirect:/user?pageNumber=1";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("userNotFound", "User not found");
             model.addAttribute("user", new User());
 
-            return "redirect:/users";
+            return "redirect:/user?pageNumber=1";
         }
-        return "redirect:/users";
+        return "redirect:/user?pageNumber=1";
     }
 
 }

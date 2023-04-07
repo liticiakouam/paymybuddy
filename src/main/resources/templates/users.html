@@ -56,10 +56,10 @@
   <div class="row">
     <div class="mb-4">
       <div class="float-start flex-column gap-4">
-        <form class="d-flex" th:action="@{/users/search}" method="GET" th:object="${user}">
+        <form class="d-flex" th:action="@{/user/search}" method="GET" th:object="${user}">
           <input name="keyword" minlength="3" th:value="${keyword}" class="form-control me-1 ps-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-success" type="submit">
-            <i class="bi bi-person-fill-add"></i>
+            <i class="bi bi-search"></i>
           </button>
         </form>
       </div>
@@ -121,8 +121,29 @@
             </tr>
             </tbody>
           </div>
-
         </table>
+
+        <div class="Page navigation example" th:if = "${totalPages > 1}" >
+          <ul class="pagination pagination-sm">
+            <li class="page-item">
+              <a th:if="${currentPage - 1 != 0}" th:href="@{'/user?pageNumber=' + ${currentPage - 1}}" class="page-link text-success">Previous</a>
+              <span class="page-link text-success" th:unless="${currentPage - 1 != 0}">Previous</span>
+            </li>
+            <li th:each="i: ${#numbers.sequence(1, totalPages)}" class="page-item">
+              <a th:if="${currentPage != i}" th:href="@{'/user?pageNumber=' +   ${i}}" class="page-link text-success" href="#">[[${i}]]</a>
+              <a th:unless="${currentPage != i}" class="page-link text-dark" href="#">[[${i}]]</a>
+            </li>
+            <li class="page-item mr-2">
+              <a th:if="${currentPage < totalPages}" th:href="@{'/user?pageNumber=' + ${currentPage + 1}}" class="page-link text-success">Next</a>
+              <span class="page-link text-success" th:unless="${currentPage < totalPages}">Next</span>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-success" th:if="${currentPage < totalPages}" th:href="@{'/user?pageNumber=' + ${totalPages}}">Last</a>
+              <span class="page-link text-success" th:unless="${currentPage < totalPages}">Last</span>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </div>

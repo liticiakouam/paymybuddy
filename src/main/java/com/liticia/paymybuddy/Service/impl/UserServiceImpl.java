@@ -3,7 +3,8 @@ package com.liticia.paymybuddy.Service.impl;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,5 +24,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> search(String keyword) {
         return userRepository.findByFirstnameContainingOrLastnameContaining(keyword, keyword);
+    }
+
+    @Override
+    public Page<User> findPaginated(Pageable pageable) {
+        return userRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 }
