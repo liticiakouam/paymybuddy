@@ -24,11 +24,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user")//http://localhost:8080/users?pageNumber=1
-    public String getUsers(
-            @RequestParam("pageNumber") int pageNumber,
-            Model model
-    ) {
+    @GetMapping("/user")//http://localhost:8080/user?pageNumber=1
+    public String getUsers(@RequestParam("pageNumber") int pageNumber, Model model) {
         model.addAttribute("contactCreated", new ContactCreated());
         return findPaginated(pageNumber, model);
     }
