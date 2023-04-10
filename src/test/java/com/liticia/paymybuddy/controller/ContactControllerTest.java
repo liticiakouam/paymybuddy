@@ -26,10 +26,9 @@ public class ContactControllerTest {
     public void testShouldReturnOkWhenAddingContact() throws Exception {
         doNothing().when(contactService).save(3);
 
-        mockMvc.perform(get("/addUser/{3}"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("/user?pageNumber=1"))
-                .andExpect(model().attributeExists("user"))
+        mockMvc.perform(get("/addUser/3"))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/user?pageNumber=1"))
                 .andReturn();
     }
 
@@ -37,10 +36,9 @@ public class ContactControllerTest {
     public void testShouldThrowUserNotFoundException() throws Exception {
         doThrow(UserNotFoundException.class).when(contactService).save(1);
 
-        mockMvc.perform(get("/addUser/{3}"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("/user?pageNumber=1"))
-                .andExpect(model().attributeExists("user"))
+        mockMvc.perform(get("/addUser/3"))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/user?pageNumber=1"))
                 .andReturn();
     }
 

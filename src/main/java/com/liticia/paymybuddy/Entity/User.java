@@ -32,6 +32,4 @@ public class User {
     private Date createdAt;
 
     private Date updatedAt;
-
-    private Boolean friend = false;
 }

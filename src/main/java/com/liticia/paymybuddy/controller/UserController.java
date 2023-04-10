@@ -1,9 +1,7 @@
 package com.liticia.paymybuddy.controller;
 
-import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.UserService;
-import com.liticia.paymybuddy.dto.BankAccountCreate;
 import com.liticia.paymybuddy.dto.ContactCreated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user")//http://localhost:8080/user?pageNumber=1
+    @GetMapping("/user")
     public String getUsers(@RequestParam("pageNumber") int pageNumber, Model model) {
         model.addAttribute("contactCreated", new ContactCreated());
         return findPaginated(pageNumber, model);

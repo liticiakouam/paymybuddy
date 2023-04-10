@@ -24,10 +24,10 @@ public class ContactRepositoryTest {
     private ContactRepository contactRepository;
 
     @Test
-    void testShouldFindUserByF() {
+    void testShouldFindUserByFriend() {
         List<Contact> userFriend = contactRepository.findByUserFriend(User.builder().id(1).build());
 
-        assertEquals(1, userFriend.size());
+        assertEquals(2, userFriend.size());
         assertEquals("liti@gmail.com", userFriend.get(0).getUser().getEmail());
     }
 

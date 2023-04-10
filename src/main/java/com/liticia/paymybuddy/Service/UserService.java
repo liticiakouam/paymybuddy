@@ -9,6 +9,5 @@ import java.util.List;
 public interface UserService {
     List<User> getAll();
     List<User> search(String keyword);
-
     Page<User> findPaginated(Pageable pageable);
 }
