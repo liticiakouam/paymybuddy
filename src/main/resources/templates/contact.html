@@ -56,10 +56,10 @@
   <div class="row">
     <div class="mb-4">
       <div class="float-start flex-column gap-4">
-        <form class="d-flex">
+        <form class="d-flex" th:action="@{/contact/search}" method="GET" th:object="${contact}">
           <input class="form-control me-1 ps-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-success" type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="bi bi-search"></i>
           </button>
         </form>
       </div>
@@ -73,19 +73,58 @@
         <table class="table table-hover">
           <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
           <tr class="bg-light">
-            <th scope="col">Name</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
             <th scope="col">Email Address</th>
             <th scope="col">Action</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>sfgtrhrt</td>
-            <td>sfgtrhrt</td>
-            <td>sfgtrhrt</td>
+          <tr th:each="contact : ${contacts}">
+            <td th:text="${contact.userFriend.firstname}"></td>
+            <td th:text="${contact.userFriend.lastname}"></td>
+            <td th:text="${contact.userFriend.email}"></td>
+            <td>
+              <a class="text-decoration-none badge rounded-pill bg-danger" th:href="@{/contact/remove/{user}(user=${contact.userFriend})}">Remove</a>
+            </td>
           </tr>
           </tbody>
+
+         <!-- <div th:if="${contactSize > 0}">
+            <tbody>
+            <tr th:each="contact : ${searchContacts}">
+              <td th:text="${contact.userFriend.firstname}"></td>
+              <td th:text="${contact.userFriend.lastname}"></td>
+              <td th:text="${contact.userFriend.email}"></td>
+              <td>
+                <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
+              </td>
+            </tr>
+            </tbody>
+          </div>-->
         </table>
+
+        <div class="Page navigation example" th:if = "${totalPages > 1}" >
+          <ul class="pagination pagination-sm">
+            <li class="page-item">
+              <a th:if="${currentPage - 1 != 0}" th:href="@{'/contact?pageNumber=' + ${currentPage - 1}}" class="page-link text-success">Previous</a>
+              <span class="page-link text-success" th:unless="${currentPage - 1 != 0}">Previous</span>
+            </li>
+            <li th:each="i: ${#numbers.sequence(1, totalPages)}" class="page-item">
+              <a th:if="${currentPage != i}" th:href="@{'/contact?pageNumber=' + ${i}}" class="page-link text-success" href="#">[[${i}]]</a>
+              <a th:unless="${currentPage != i}" class="page-link text-dark" href="#">[[${i}]]</a>
+            </li>
+            <li class="page-item mr-2">
+              <a th:if="${currentPage < totalPages}" th:href="@{'/contact?pageNumber=' + ${currentPage + 1}}" class="page-link text-success">Next</a>
+              <span class="page-link text-success" th:unless="${currentPage < totalPages}">Next</span>
+            </li>
+            <li class="page-item">
+              <a class="page-link text-success" th:if="${currentPage < totalPages}" th:href="@{'/contact?pageNumber=' + ${totalPages}}">Last</a>
+              <span class="page-link text-success" th:unless="${currentPage < totalPages}">Last</span>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </div>

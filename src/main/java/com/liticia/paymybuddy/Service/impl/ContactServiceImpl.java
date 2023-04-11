@@ -5,10 +5,11 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.ContactService;
-import com.liticia.paymybuddy.dto.ContactCreated;
 import com.liticia.paymybuddy.exception.UserAlreadyExistException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -44,5 +45,15 @@ public class ContactServiceImpl implements ContactService {
         contact.setCreatedAt(new Date());
 
         contactRepository.save(contact);
+    }
+
+    @Override
+    public Page<Contact> findPaginated(Pageable pageable) {
+        return contactRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
+
+    @Override
+    public void removeUser(User user) {
+        contactRepository.deleteByUserFriend(user);
     }
 }
