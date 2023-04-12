@@ -47,7 +47,6 @@ public class UserController {
     private String findPaginated(@RequestParam("pageNumber") int pageNumber,
                                  Model model
     ) {
-
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 

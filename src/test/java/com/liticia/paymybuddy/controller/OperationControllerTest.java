@@ -82,7 +82,7 @@ public class OperationControllerTest {
     }
 
     @Test
-    public void testShouldThrowUserNortFoundException() throws Exception {
+    public void testShouldThrowUserNotFoundException() throws Exception {
         OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
 
         doThrow(UserNotFoundException.class).when(operationService).creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());

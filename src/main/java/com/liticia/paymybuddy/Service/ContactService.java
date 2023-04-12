@@ -11,5 +11,6 @@ import java.util.List;
 public interface ContactService {
     void save(long friendId);
     Page<Contact> findPaginated(Pageable pageable);
-    void removeUser(User user);
+    void removeUser(long id);
+    List<Contact> getAll();
 }

@@ -69,4 +69,12 @@ public class ContactServiceImplTest {
         verify(contactRepository, times(1)).findByUserFriend(any(User.class));
     }
 
+    @Test
+    void testShouldDeleteContact() {
+        doNothing().when(contactRepository).deleteById(1L);
+        contactService.removeUser(1);
+
+        verify(contactRepository, times(1)).deleteById(1l);
+    }
+
 }

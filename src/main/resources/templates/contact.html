@@ -28,7 +28,7 @@
             <a class="nav-link" href="transfer.html">Transfer</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link profile" href="profile.html">Profile</a>
+            <a class="nav-link profile" href="profile.html" th:href="@{/bankAccount?pageNumber=1}">Profile</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="contact.html">Contact</a>
@@ -64,7 +64,9 @@
         </form>
       </div>
 
-      <button class="btn btn-success float-end">Add Contact</button>
+      <a class="btn btn-success float-end" th:href="@{/user?pageNumber=1}">Add Contact</a>
+      <a class="text-decoration btn btn-success float-end" >Transfer Money</a>
+
     </div>
     <div class="card">
       <div class="card-body">
@@ -76,7 +78,7 @@
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Email Address</th>
-            <th scope="col">Action</th>
+            <th scope="col">Action</span></th>
           </tr>
           </thead>
           <tbody>
@@ -85,23 +87,10 @@
             <td th:text="${contact.userFriend.lastname}"></td>
             <td th:text="${contact.userFriend.email}"></td>
             <td>
-              <a class="text-decoration-none badge rounded-pill bg-danger" th:href="@{/contact/remove/{user}(user=${contact.userFriend})}">Remove</a>
+              <a class="text-decoration-none badge rounded-pill bg-danger me-3" th:href="@{/contact/remove/{id}(id=${contact.id})}">Remove</a>
             </td>
           </tr>
           </tbody>
-
-         <!-- <div th:if="${contactSize > 0}">
-            <tbody>
-            <tr th:each="contact : ${searchContacts}">
-              <td th:text="${contact.userFriend.firstname}"></td>
-              <td th:text="${contact.userFriend.lastname}"></td>
-              <td th:text="${contact.userFriend.email}"></td>
-              <td>
-                <a class="text-decoration-none badge rounded-pill bg-success">Add</a>
-              </td>
-            </tr>
-            </tbody>
-          </div>-->
         </table>
 
         <div class="Page navigation example" th:if = "${totalPages > 1}" >

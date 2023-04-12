@@ -53,7 +53,13 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public void removeUser(User user) {
-        contactRepository.deleteByUserFriend(user);
+    public void removeUser(long id) {
+        contactRepository.deleteById(id);
     }
+
+    @Override
+    public List<Contact> getAll() {
+        return contactRepository.findAll();
+    }
+
 }
