@@ -72,4 +72,10 @@ public class ContactController {
         return "redirect:/contact?pageNumber=1";
     }
 
+    @GetMapping("/contact/find/{id}")
+    public String findContactById (@PathVariable(value = "id") long id) {
+        contactService.findById(id);
+        return "redirect:/transaction/contact?contactId={id}";
+    }
+
 }

@@ -1,13 +1,16 @@
 package com.liticia.paymybuddy.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Builder
+@Builder @NoArgsConstructor @AllArgsConstructor
 @Entity
 public class Transaction {
 
@@ -19,6 +22,7 @@ public class Transaction {
 
     private String subject;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date transactionDate;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

@@ -15,6 +15,6 @@ import java.util.List;
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     List<Contact> findByUserFriend(User user);
     Page<Contact> findAllByOrderByCreatedAtDesc(Pageable pageable);
-    @Query(value = "SELECT firstname, lastname FROM contact, user WHERE contact.friend_user = user.id AND user.firstname LIKE '%:firstname%' OR user.lastname LIKE '%:lastname%'")
-    List<Contact> search (@Param(value = "firstname") String firstname, @Param(value = "lastname")String lastname);
+ /*   @Query(value = "SELECT firstname, lastname FROM contact, user WHERE contact.friend_user = user.id AND user.firstname LIKE '%:firstname%' OR user.lastname LIKE '%:lastname%'")
+    List<Contact> search (@Param(value = "firstname") String firstname, @Param(value = "lastname")String lastname);*/
 }
