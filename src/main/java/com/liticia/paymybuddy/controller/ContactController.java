@@ -46,11 +46,11 @@ public class ContactController {
 
     @GetMapping("/contact")
     public String getContacts(@RequestParam("pageNumber") int pageNumber, Model model) {
-        return findPaginated(pageNumber, model);
+        return findAll(pageNumber, model);
     }
 
-    private String findPaginated(@RequestParam("pageNumber") int pageNumber,
-                                 Model model
+    private String findAll(@RequestParam("pageNumber") int pageNumber,
+                           Model model
     ) {
 
         int pageSize = 5;
@@ -67,7 +67,7 @@ public class ContactController {
     }
 
     @GetMapping("/contact/remove/{id}")
-    public String removeUserFromYourFriendList (@PathVariable(value = "id") long id, Model model, RedirectAttributes redirectAttributes) {
+    public String removeUserFromYourFriendList (@PathVariable(value = "id") long id) {
         contactService.removeUser(id);
         return "redirect:/contact?pageNumber=1";
     }
