@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
@@ -84,6 +83,7 @@ public class ContactControllerTest {
                 .andExpect(view().name("redirect:/contact?pageNumber=1"))
                 .andReturn();
     }
+
     @Test
     void testShouldFindContactById() throws Exception {
         Contact contact = Contact.builder().id(1).build();

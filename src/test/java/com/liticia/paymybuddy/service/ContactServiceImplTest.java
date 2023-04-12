@@ -76,6 +76,7 @@ public class ContactServiceImplTest {
         verify(contactRepository, times(1)).deleteById(1l);
     }
 
+
     @Test
     void testShouldFindContactById() {
         Contact contact = Contact.builder().id(1).build();

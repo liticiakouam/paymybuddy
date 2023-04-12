@@ -67,5 +67,4 @@ public class ContactServiceImpl implements ContactService {
     public Optional<Contact> findById(long id) {
         return contactRepository.findById(id);
     }
-
 }
