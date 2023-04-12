@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface TransactionService {
     List<Transaction> getAll();
-    Page<Transaction> findPaginated(Pageable pageable);
+    Page<Transaction> findAll(Pageable pageable);
     void save(TransactionCreate transactionCreate);
 }

@@ -34,7 +34,7 @@ public class OperationServiceImplTest {
     void testShouldReturnOperations() {
         List<Operation> list = Arrays.asList(
                 Operation.builder().operationType(OperationType.CREDIT).build(),
-                Operation.builder().amount(2000.0).build()
+                Operation.builder().amount(2000).build()
         ); 
         when(operationRepository.findAll()).thenReturn(list);
 
@@ -45,8 +45,8 @@ public class OperationServiceImplTest {
 
     @Test
     void testShouldSaveCreditedOperation()  {
-        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
-        User user = User.builder().id(2L).balance(2000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000).build();
+        User user = User.builder().id(2L).balance(2000).build();
 
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
@@ -60,8 +60,8 @@ public class OperationServiceImplTest {
 
     @Test
     void testShouldSavedebitedOperation()  {
-        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(100000.0).build();
-        User user = User.builder().id(2L).balance(200000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(100000).build();
+        User user = User.builder().id(2L).balance(200000).build();
 
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
@@ -76,8 +76,8 @@ public class OperationServiceImplTest {
 
     @Test
     void testShouldThrowExceptionWhenInsufficientBalance()  {
-        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
-        User user = User.builder().id(2L).balance(2000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000).build();
+        User user = User.builder().id(2L).balance(2000).build();
 
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
@@ -91,7 +91,7 @@ public class OperationServiceImplTest {
 
     @Test
     void testShouldThrowExceptionWhenThereIsNoUser()  {
-        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().operationType(OperationType.DEBIT).accountNumber("IU13BONE").amount(200000).build();
 
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());

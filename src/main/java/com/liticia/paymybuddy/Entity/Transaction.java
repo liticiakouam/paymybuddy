@@ -22,7 +22,7 @@ public class Transaction {
 
     private String subject;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date transactionDate;
 
     private float debitedAmount;

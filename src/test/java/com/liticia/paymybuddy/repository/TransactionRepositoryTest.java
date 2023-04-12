@@ -1,42 +1,39 @@
 package com.liticia.paymybuddy.repository;
 
-import com.liticia.paymybuddy.Entity.Contact;
+import com.liticia.paymybuddy.Entity.BankAccount;
+import com.liticia.paymybuddy.Entity.Transaction;
 import com.liticia.paymybuddy.Entity.User;
-import com.liticia.paymybuddy.Repository.ContactRepository;
+import com.liticia.paymybuddy.Repository.TransactionRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
         "spring.datasource.url=jdbc:mysql://localhost:3306/paymybuddytest?createDatabaseIfExist=true&useSSL=false&serverTimezone=UTC\n"
 })
-public class ContactRepositoryTest {
+public class TransactionRepositoryTest {
     @Autowired
-    private ContactRepository contactRepository;
+    private TransactionRepository transactionRepository;
 
     @Test
-    void testShouldFindUserByFriend() {
-        List<Contact> userFriend = contactRepository.findByUserFriend(User.builder().id(1).build());
+    void testShouldReturnBankAccountsOrderByCreatedAtDesc() {
+        Pageable pageable = PageRequest.of(1, 2);
+        Page<Transaction> transactions = transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
 
-        assertEquals(2, userFriend.size());
-        assertEquals("liti@gmail.com", userFriend.get(0).getUser().getEmail());
-    }
-    @Test
-    void testShouldDeleteContact() {
-        contactRepository.deleteById(1L);
-        Optional<Contact> optionalContact = contactRepository.findById(1L);
-        assertTrue(optionalContact.isEmpty());
+        assertEquals(2, transactions.getTotalElements());
+        assertEquals(1, transactions.getTotalPages());
     }
 
 }

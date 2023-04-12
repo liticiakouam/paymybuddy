@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Page<Transaction> findPaginated(Pageable pageable) {
+    public Page<Transaction> findAll(Pageable pageable) {
         return transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
     }
 

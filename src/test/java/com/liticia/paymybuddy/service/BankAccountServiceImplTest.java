@@ -51,7 +51,7 @@ public class BankAccountServiceImplTest {
     @Test
     void testShouldSaveBankAccount() {
         BankAccountCreate bankAccountCreate = BankAccountCreate.builder().accountNumber("IU22BONE").build();
-        User user = User.builder().id(2L).balance(2000.0).build();
+        User user = User.builder().id(2L).balance(2000).build();
 
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountNumber(bankAccountCreate.getAccountNumber());

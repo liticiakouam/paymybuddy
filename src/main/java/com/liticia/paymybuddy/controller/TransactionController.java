@@ -59,7 +59,7 @@ public class TransactionController {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
-        Page<Transaction> page = transactionService.findPaginated(pageable);
+        Page<Transaction> page = transactionService.findAll(pageable);
         List<Transaction> transactions = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);

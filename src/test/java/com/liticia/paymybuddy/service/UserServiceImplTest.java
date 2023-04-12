@@ -31,7 +31,7 @@ public class UserServiceImplTest {
     @Test
     void testShouldReturnUsers() {
         List<User> users = Arrays.asList(
-                User.builder().firstname("liticia").lastname("anzwe").balance(1000.0).build(),
+                User.builder().firstname("liticia").lastname("anzwe").balance(1000).build(),
                 User.builder().firstname("momo").build()
         ); 
         when(userRepository.findAll()).thenReturn(users);
@@ -45,7 +45,7 @@ public class UserServiceImplTest {
     @Test
     void testSholdReturnUsers() {
         List<User> users = Collections.singletonList(
-                User.builder().firstname("liticia").lastname("anzwe").balance(1000.0).build()
+                User.builder().firstname("liticia").lastname("anzwe").balance(1000).build()
         );
         when(userRepository.findByFirstnameContainingOrLastnameContaining("liti", "liti")).thenReturn(users);
 

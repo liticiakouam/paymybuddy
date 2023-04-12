@@ -31,8 +31,8 @@ public class UserControllerTest {
     @Test
     public void testShouldVerifyThatControllerReturnOkStatusAndUserLengthIsCorrect() throws Exception {
         List<User> users = Arrays.asList(
-                User.builder().firstname("liticia").lastname("anz").balance(1000.0).build(),
-                User.builder().firstname("abena").lastname("anze").balance(1000.0).build()
+                User.builder().firstname("liticia").lastname("anz").balance(1000).build(),
+                User.builder().firstname("abena").lastname("anze").balance(1000).build()
         );
 
         Pageable pageable = PageRequest.of(1, 5);
@@ -54,8 +54,8 @@ public class UserControllerTest {
     @Test
     public void testShouldVerifyThatControllerReturnOkStatusAndSeachUserResult() throws Exception {
         List<User> users = Arrays.asList(
-                User.builder().firstname("liticia").lastname("anz").balance(1000.0).build(),
-                User.builder().firstname("abena").lastname("anze").balance(1000.0).build()
+                User.builder().firstname("liticia").lastname("anz").balance(1000).build(),
+                User.builder().firstname("abena").lastname("anze").balance(1000).build()
         );
 
         when(userService.search("liti")).thenReturn(users);
