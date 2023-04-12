@@ -1,11 +1,13 @@
 package com.liticia.paymybuddy.Entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@Builder
 @Entity
 public class Transaction {
 
@@ -18,4 +20,8 @@ public class Transaction {
     private String subject;
 
     private Date transactionDate;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "contact_id", referencedColumnName = "contact_id")
+    Contact contact;
 }

@@ -30,5 +30,10 @@ public class ContactRepositoryTest {
         assertEquals(2, userFriend.size());
         assertEquals("liti@gmail.com", userFriend.get(0).getUser().getEmail());
     }
+    @Test
+    void testShouldDeleteContact() {
+        contactRepository.deleteById(1l);
+
+    }
 
 }
