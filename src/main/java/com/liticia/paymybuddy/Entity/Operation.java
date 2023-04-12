@@ -32,6 +32,6 @@ public class Operation {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date operationDate;
 
-    private Double amount;
+    private float amount;
 
 }

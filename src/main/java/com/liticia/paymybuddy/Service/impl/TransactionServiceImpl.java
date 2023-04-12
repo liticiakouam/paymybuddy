@@ -56,7 +56,8 @@ public class TransactionServiceImpl implements TransactionService {
         if (user.getBalance() < transactionCreate.getAmount()) {
             throw new InsufficientBalanceException();
         }
-        user.setBalance(user.getBalance() - transactionCreate.getAmount());
+        float debitedAmount = (float) (transactionCreate.getAmount() * 0.005);
+        user.setBalance(user.getBalance() - transactionCreate.getAmount() - debitedAmount);
         userRepository.save(user);
 
         userFriend.setBalance(userFriend.getBalance() + transactionCreate.getAmount());
@@ -65,6 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = Transaction.builder().build();
         transaction.setSubject(transactionCreate.getSubject());
         transaction.setContact(optionalContact.get());
+        transaction.setDebitedAmount(debitedAmount);
         transaction.setAmount(transactionCreate.getAmount());
         transaction.setTransactionDate(new Date());
 

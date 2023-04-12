@@ -11,9 +11,10 @@ import java.util.List;
 
 public interface OperationService {
     List<Operation> getAll();
-    void creditAccount(Double amount, String accountNumber);
 
-    void debitAccount(Double amount, String accountNumber);
+    void creditAccount(float amount, String accountNumber);
+
+    void debitAccount(float amount, String accountNumber);
 
     Page<Operation> findPaginated(Pageable pageable);
 }

@@ -41,7 +41,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Transactional
     @Override
-    public void creditAccount(Double amount, String accountNumber) {
+    public void creditAccount(float amount, String accountNumber) {
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if(optionalUser.isEmpty()) {
             throw new UserNotFoundException();
@@ -68,7 +68,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Transactional
     @Override
-    public void debitAccount(Double amount, String accountNumber) {
+    public void debitAccount(float amount, String accountNumber) {
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if(optionalUser.isEmpty()) {
             throw new UserNotFoundException();

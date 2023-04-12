@@ -16,5 +16,5 @@ import javax.validation.constraints.NotNull;
 public class TransactionCreate {
     private long contactId;
     private String subject;
-    private Double amount;
+    private float amount;
 }

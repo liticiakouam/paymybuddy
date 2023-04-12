@@ -16,5 +16,5 @@ import javax.validation.constraints.NotNull;
 public class OperationCreate {
     private OperationType operationType;
     private String accountNumber;
-    private Double amount;
+    private float amount;
 }
