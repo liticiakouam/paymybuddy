@@ -30,7 +30,7 @@ public class ContactController {
             redirectAttributes.addFlashAttribute("userAdd", "This user has been successfully add to your friend");
 
         } catch (ContactAlreadyExistException e) {
-            redirectAttributes.addFlashAttribute("contactExist", "This user is already your friend");
+            redirectAttributes.addFlashAttribute("contactExist", "This contact already exist, it can't be added");
             model.addAttribute("user", new User());
 
             return "redirect:/user?pageNumber=1";
@@ -40,7 +40,7 @@ public class ContactController {
 
             return "redirect:/user?pageNumber=1";
         }    catch (NotSupportedActionException e) {
-            redirectAttributes.addFlashAttribute("notSupported", "You cannot be added as a contact");
+            redirectAttributes.addFlashAttribute("notSupported", "Action not supported");
             model.addAttribute("user", new User());
 
             return "redirect:/user?pageNumber=1";
