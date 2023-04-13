@@ -3,8 +3,9 @@ package com.liticia.paymybuddy.controller;
 import com.liticia.paymybuddy.Entity.Contact;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.ContactService;
+import com.liticia.paymybuddy.exception.ContactNotFoundException;
+import com.liticia.paymybuddy.exception.NotSupportedActionException;
 import com.liticia.paymybuddy.exception.UserAlreadyExistException;
-import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,8 +36,13 @@ public class ContactController {
             model.addAttribute("user", new User());
 
             return "redirect:/user?pageNumber=1";
-        } catch (UserNotFoundException e) {
+        } catch (ContactNotFoundException e) {
             redirectAttributes.addFlashAttribute("userNotFound", "User not found");
+            model.addAttribute("user", new User());
+
+            return "redirect:/user?pageNumber=1";
+        }    catch (NotSupportedActionException e) {
+            redirectAttributes.addFlashAttribute("notSupported", "You cannot be added as a contact");
             model.addAttribute("user", new User());
 
             return "redirect:/user?pageNumber=1";

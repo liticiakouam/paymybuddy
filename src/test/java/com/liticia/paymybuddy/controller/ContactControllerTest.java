@@ -2,6 +2,7 @@ package com.liticia.paymybuddy.controller;
 
 import com.liticia.paymybuddy.Entity.*;
 import com.liticia.paymybuddy.Service.ContactService;
+import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,8 @@ public class ContactControllerTest {
     }
 
     @Test
-    public void testShouldThrowUserNotFoundException() throws Exception {
-        doThrow(UserNotFoundException.class).when(contactService).save(1);
+    public void testShouldThrowContactNotFoundException() throws Exception {
+        doThrow(ContactNotFoundException.class).when(contactService).save(1);
 
         mockMvc.perform(get("/addUser/3"))
                 .andExpect(status().isFound())

@@ -5,17 +5,12 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.ContactService;
-import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.Service.impl.ContactServiceImpl;
-import com.liticia.paymybuddy.Service.impl.UserServiceImpl;
-import com.liticia.paymybuddy.exception.InsufficientBalanceException;
-import com.liticia.paymybuddy.exception.UserAlreadyExistException;
-import com.liticia.paymybuddy.exception.UserNotFoundException;
+import com.liticia.paymybuddy.exception.NotSupportedActionException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,41 +26,41 @@ public class ContactServiceImplTest {
 
     @Test
     void testShouldAddAUserIntoYourContact() {
-        User userF = User.builder().id(1).firstname("anze").build();
+        User userFriend = User.builder().id(1).firstname("anze").build();
         User user = User.builder().id(2).firstname("anz").build();
 
         List<Contact> contacts = Arrays.asList(
-                Contact.builder().user(user).userFriend(userF).build(),
-                Contact.builder().user(user).userFriend(userF).build()
+                Contact.builder().user(user).userFriend(userFriend).build(),
+                Contact.builder().user(user).userFriend(userFriend).build()
         );
 
-        when(userRepository.findById(2L)).thenReturn(Optional.of(userF));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(userFriend));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(contactRepository.findByUserFriend(user)).thenReturn(contacts);
+        when(contactRepository.findByUserAndUserFriend(user, userFriend)).thenReturn(contacts);
 
-        contactService.save(2);
+        contactService.save(1);
         verify(userRepository, times(2)).findById(any());
-        verify(contactRepository, times(1)).findByUserFriend(any(User.class));
+        verify(contactRepository, times(1)).findByUserAndUserFriend(any(User.class), any(User.class));
 
     }
 
     @Test
-    void testShouldThrowUserAlreadyExistExceptionWhenTheUserYouWantToAddIsAlreadyYourFriend() {
-        User userF = User.builder().id(1).firstname("anze").build();
+    void testShouldThrowNotSupportedOperationExceptionWhenTheActionCannotBeSupported() {
+        User userFriend = User.builder().id(1).firstname("anze").build();
         User user = User.builder().id(2).firstname("anze").build();
 
         List<Contact> contacts = Arrays.asList(
-                Contact.builder().user(user).userFriend(userF).build(),
-                Contact.builder().user(user).userFriend(userF).build()
+                Contact.builder().user(user).userFriend(userFriend).build(),
+                Contact.builder().user(user).userFriend(userFriend).build()
         );
 
-        when(userRepository.findById(2L)).thenReturn(Optional.of(userF));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(userFriend));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(contactRepository.findByUserFriend(user)).thenReturn(contacts);
-        assertThrows(UserAlreadyExistException.class, ()->contactService.save(userF.getId()));
+        when(contactRepository.findByUserAndUserFriend(user, userFriend)).thenReturn(contacts);
+        assertThrows(NotSupportedActionException.class, ()->contactService.save(2));
 
         verify(userRepository, times(2)).findById(any());
-        verify(contactRepository, times(1)).findByUserFriend(any(User.class));
+        verify(contactRepository, times(1)).findByUserAndUserFriend(any(User.class), any(User.class));
     }
 
     @Test
@@ -73,18 +68,20 @@ public class ContactServiceImplTest {
         doNothing().when(contactRepository).deleteById(1L);
         contactService.removeUser(1);
 
-        verify(contactRepository, times(1)).deleteById(1l);
+        Optional<Contact> optionalContact = contactService.findById(1);
+        assertTrue(optionalContact.isEmpty());
+        verify(contactRepository, times(1)).deleteById(1L);
     }
 
 
     @Test
     void testShouldFindContactById() {
         Contact contact = Contact.builder().id(1).build();
-        when(contactRepository.findById(1l)).thenReturn(Optional.of(contact));
+        when(contactRepository.findById(1L)).thenReturn(Optional.of(contact));
 
         Optional<Contact> optionalContact = contactService.findById(1);
         assertTrue(optionalContact.isPresent());
-        verify(contactRepository, times(1)).findById(1l);
+        verify(contactRepository, times(1)).findById(1L);
     }
 
 }
