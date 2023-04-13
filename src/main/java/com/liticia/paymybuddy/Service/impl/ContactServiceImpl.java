@@ -5,6 +5,7 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.ContactService;
+import com.liticia.paymybuddy.exception.ContactAlreadyExistException;
 import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.NotSupportedActionException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
@@ -43,7 +44,7 @@ public class ContactServiceImpl implements ContactService {
         List<Contact> optionalContact = contactRepository.findByUserAndUserFriend(optionalUser.get(), friendUser.get());
 
         if (optionalContact.size() > 0) {
-            throw new ContactNotFoundException();
+            throw new ContactAlreadyExistException();
         }
 
         if (optionalUser.get().equals(friendUser.get())) {
