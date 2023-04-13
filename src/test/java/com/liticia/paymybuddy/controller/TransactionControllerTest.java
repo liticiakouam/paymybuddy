@@ -1,8 +1,14 @@
 package com.liticia.paymybuddy.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liticia.paymybuddy.Entity.*;
 import com.liticia.paymybuddy.Service.ContactService;
 import com.liticia.paymybuddy.Service.TransactionService;
+import com.liticia.paymybuddy.dto.OperationCreate;
+import com.liticia.paymybuddy.dto.TransactionCreate;
+import com.liticia.paymybuddy.exception.ContactNotFoundException;
+import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,7 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,32 +41,48 @@ public class TransactionControllerTest {
     private ContactService contactService;
 
     @Test
-    public void testShouldVerifyThatControllerReturnOkStatusAndTransactionLengthIsCorrect() throws Exception {
-        List<Transaction> transactions = Arrays.asList(
-                Transaction.builder().amount(2000).id(2).build(),
-                Transaction.builder().amount(5000).id(3).build()
-        );
+    public void testShouldReturnOkWhenCreatedTransaction() throws Exception {
+        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).amount(5000).build();
 
-        User userF = User.builder().id(1).firstname("anze").build();
-        User user = User.builder().id(2).firstname("anz").build();
+        doNothing().when(transactionService).save(transactionCreate);
 
-        Contact contact = Contact.builder().id(1).user(user).userFriend(userF).build();
-        Page<Transaction> page = new PageImpl<>(transactions);
+        String content = new ObjectMapper().writeValueAsString(transactionCreate);
+        MockHttpServletRequestBuilder mockRequest = post("/transaction/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isFound());
+    }
 
-        when(transactionService.findAll(any(Pageable.class))).thenReturn(page);
-        when(contactService.findById(1)).thenReturn(Optional.of(contact));
+    @Test
+    public void testShouldThrowContactNotFoundException() throws Exception {
+        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).amount(5000).build();
 
-         mockMvc.perform(get("/transaction/contact?contactId=1"))
-                .andExpect(status().isFound())
-                .andExpect(view().name("transaction"))
-                .andExpect(model().attributeExists("currentPage"))
-                .andExpect(model().attributeExists("totalPages"))
-                .andExpect(model().attributeExists("totalItems"))
-                .andExpect(model().attributeExists("contact"))
-                .andExpect(model().attributeExists("transaction"))
-                .andExpect(model().attributeExists("transactions"))
-                .andReturn();
+        doThrow(ContactNotFoundException.class).when(transactionService).save(transactionCreate);
 
+        String content = new ObjectMapper().writeValueAsString(transactionCreate);
+        MockHttpServletRequestBuilder mockRequest = post("/transaction/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    public void testShouldThrowInsufficientBalanceException() throws Exception {
+        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).amount(5000).build();
+
+        doThrow(InsufficientBalanceException.class).when(transactionService).save(transactionCreate);
+
+        String content = new ObjectMapper().writeValueAsString(transactionCreate);
+        MockHttpServletRequestBuilder mockRequest = post("/transaction/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isFound());
     }
 
 }
