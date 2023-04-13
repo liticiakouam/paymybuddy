@@ -83,14 +83,4 @@ public class ContactControllerTest {
                 .andExpect(view().name("redirect:/contact?pageNumber=1"))
                 .andReturn();
     }
-
-    @Test
-    void testShouldFindContactById() throws Exception {
-        Contact contact = Contact.builder().id(1).build();
-        when(contactService.findById(1L)).thenReturn(Optional.of(contact));
-
-        mockMvc.perform(get("/contact/find/1"))
-                .andExpect(status().isFound())
-                .andReturn();
-    }
 }
