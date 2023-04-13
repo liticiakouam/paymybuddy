@@ -36,6 +36,7 @@ public class ContactServiceImpl implements ContactService {
         if (optionalContact.size() > 0) {
             throw new UserAlreadyExistException();
         }
+
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
         }
@@ -62,4 +63,8 @@ public class ContactServiceImpl implements ContactService {
         return contactRepository.findAll();
     }
 
+    @Override
+    public Optional<Contact> findById(long id) {
+        return contactRepository.findById(id);
+    }
 }

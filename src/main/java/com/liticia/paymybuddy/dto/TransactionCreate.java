@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @NotNull
-public class OperationCreate {
-    private OperationType operationType;
-    private String accountNumber;
+public class TransactionCreate {
+    private long contactId;
+    private String subject;
     private float amount;
 }

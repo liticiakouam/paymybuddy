@@ -27,7 +27,7 @@ public class User {
 
     private String password;
 
-    private Double balance;
+    private float balance;
 
     private Date createdAt;
 

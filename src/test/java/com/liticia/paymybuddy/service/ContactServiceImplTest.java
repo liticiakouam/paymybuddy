@@ -19,8 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class ContactServiceImplTest {
@@ -75,6 +74,17 @@ public class ContactServiceImplTest {
         contactService.removeUser(1);
 
         verify(contactRepository, times(1)).deleteById(1l);
+    }
+
+
+    @Test
+    void testShouldFindContactById() {
+        Contact contact = Contact.builder().id(1).build();
+        when(contactRepository.findById(1l)).thenReturn(Optional.of(contact));
+
+        Optional<Contact> optionalContact = contactService.findById(1);
+        assertTrue(optionalContact.isPresent());
+        verify(contactRepository, times(1)).findById(1l);
     }
 
 }

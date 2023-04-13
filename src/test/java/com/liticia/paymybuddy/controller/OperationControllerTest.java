@@ -43,7 +43,7 @@ public class OperationControllerTest {
     public void testShouldVerifyThatControllerReturnOkStatusAndOperationLengthIsCorrect() throws Exception {
         List<Operation> operations = Arrays.asList(
                 Operation.builder().id(2).bankAccount(BankAccount.builder().description("MOMO").build()).operationType(OperationType.DEBIT).build(),
-                Operation.builder().id(1).bankAccount(BankAccount.builder().description("MOMO").build()).amount(2000.0).build()
+                Operation.builder().id(1).bankAccount(BankAccount.builder().description("MOMO").build()).amount(2000).build()
         );
         List<BankAccount> bankAccounts = Arrays.asList(
                 BankAccount.builder().description("mtn").build(),
@@ -68,7 +68,7 @@ public class OperationControllerTest {
 
     @Test
     public void testShouldReturnOkWhenCreatedOperation() throws Exception {
-        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000).build();
 
         doNothing().when(operationService).creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
 
@@ -83,7 +83,7 @@ public class OperationControllerTest {
 
     @Test
     public void testShouldThrowUserNotFoundException() throws Exception {
-        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000).build();
 
         doThrow(UserNotFoundException.class).when(operationService).creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
 
@@ -98,7 +98,7 @@ public class OperationControllerTest {
 
     @Test
     public void testShouldThrowInsufficientBalanceException() throws Exception {
-        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000.0).build();
+        OperationCreate operationCreate = OperationCreate.builder().accountNumber("IU12UBA").operationType(OperationType.CREDIT).amount(11000).build();
 
         doThrow(InsufficientBalanceException.class).when(operationService).debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
 

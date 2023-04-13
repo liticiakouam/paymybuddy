@@ -26,7 +26,7 @@
             <a class="nav-link" href="home.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="transfer.html">Transfer</a>
+            <a class="nav-link" href="transfer.html" th:href="@{/transaction?pageNumber=1}">Transfer</a>
           </li>
           <li class="nav-item">
             <a class="nav-link profile" href="profile.html">Profile</a>
@@ -49,65 +49,116 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="home.html">Home</a></li>
-          <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="profile.html">Profile</a></li>
-          <li class="breadcrumb-item active" aria-current="page"><a class="text-success text-decoration-none" href="account.html">Account</a></li>
+          <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="profile.html">Transfer</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><a class="text-success text-decoration-none" href="account.html">Transaction</a></li>
         </ol>
       </nav>
-    </div><!-- End Page Title -->
+    </div>
 
 
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <div class="row mt-4 mb-4">
-            <h4 class="text-success">Transaction History</h4>
-          </div>
+    <div class="row mt-4">
+        <div class="col-md-6  mb-2">
+          <h4 class="text-dark">Transfer Money</h4>
+        </div>
+        <div class="col-md-6 mb-4">
+          <a class="text-decoration-none btn btn-success float-end" th:href="@{/user?pageNumber=1}">Add Contact</a>
+        </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="text-success float-start">Send money to your contact</h5>
 
-          <div class="card">
-            <div  class="card-body">
-              <div class="row mt-2 mb-2">
-                <h5 class="text-dark">Transaction</h5>
-              </div>
+        <div th:if="${balanceError}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${balanceError}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-              <form class="row" th:action="" method="POST" th:object="" enctype="multipart/form-data">
-                <div class="col-md-3">
-                  <!--<select class="form-control" name="" id="">
-                    <option th:each="contact : ${contacts}"
-                            th:value="${contact.userFriend}"
-                            th:text="${contact.userFriend.firstname} + ${contact.userFriend.lastname}" ></option>
-                  </select>-->
-                </div>
-                <div class="col-md-4">
-                  <input class="form-control" type="number" placeholder="amount" min="500">
-                </div>
-                <div class="col-md-4">
-                  <input class="form-control" type="text" placeholder="Description">
-                </div>
-                <div class="col-md-1">
-                  <button class="float-end btn btn-success" type="submit">Save</button>
-                </div>
-              </form>
-            </div>
-          </div>
+        <div th:if="${contactNotFound}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${contactNotFound}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-          <table class="mt-4 table table-hover">
-            <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
-            <tr>
-              <th scope="col">Bank account</th>
-              <th scope="col">Operation type</th>
-              <th scope="col">Amount</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>sfgtrhrt</td>
-              <td>sfgtrhrt</td>
-              <td>sfgtrhrt</td>
-            </tr>
-            </tbody>
-          </table>
+        <div th:if="${transactionSave}" class="mx-auto float-end alert alert-success alert-dismissible fade show" role="alert">
+          <span th:text="${transactionSave}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       </div>
+
+      <div  class="card-body">
+        <form class="row"  enctype="multipart/form-data"  th:action="@{/transaction/add}" method="POST" th:object="${transaction}">
+           <div th:if="${contacts}" class="col-md-3">
+                <select class="form-control" th:field="*{contactId}">
+                  <option th:each="contact : ${contacts}"
+                          th:value="${contact.id}"
+                          th:text="${contact.userFriend.firstname} +' '+ ${contact.userFriend.lastname}" ></option>
+                </select>
+           </div>
+          <div th:if="${contact}" class="col-md-3">
+              <select class="form-control" th:field="*{contactId}">
+                <option th:value="${contact.id}"
+                        th:text="${contact.userFriend.firstname} +' '+ ${contact.userFriend.lastname}" >
+                </option>
+              </select>
+          </div>
+          <div class="col-md-4">
+            <input class="form-control" th:field="*{amount}" type="number" placeholder="amount" min="500">
+          </div>
+          <div class="col-md-4">
+            <input class="form-control" th:field="*{subject}" type="text" placeholder="Description">
+          </div>
+          <div class="col-md-1">
+            <button class="float-end btn btn-success" type="submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-4 mb-2">
+      <h4 class="text-dark">My Transactions</h4>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <table class="mt-4 table table-hover">
+          <thead style=" font-family:Nunito, sans-serif;font-size:18px;">
+          <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="transaction : ${transactions}">
+            <td th:text="${transaction.contact.userFriend.firstname} +' '+ ${transaction.contact.userFriend.lastname}"></td>
+            <td th:text="${transaction.subject}"></td>
+            <td th:text="${transaction.amount}"></td>
+          </tr>
+          </tbody>
+        </table>
+
+                  <div class="Page navigation example" th:if = "${totalPages > 1}" >
+                    <ul class="pagination pagination-sm">
+                      <li class="page-item">
+                        <a th:if="${currentPage - 1 != 0}" th:href="@{'/transaction?pageNumber=' + ${currentPage - 1}}" class="page-link text-success">Previous</a>
+                        <span class="page-link text-success" th:unless="${currentPage - 1 != 0}">Previous</span>
+                      </li>
+                      <li th:each="i: ${#numbers.sequence(1, totalPages)}" class="page-item">
+                        <a th:if="${currentPage != i}" th:href="@{'/transaction?pageNumber=' +   ${i}}" class="page-link text-success" href="#">[[${i}]]</a>
+                        <a th:unless="${currentPage != i}" class="page-link text-dark" href="#">[[${i}]]</a>
+                      </li>
+                      <li class="page-item mr-2">
+                        <a th:if="${currentPage < totalPages}" th:href="@{'/transaction?pageNumber=' + ${currentPage + 1}}" class="page-link text-success">Next</a>
+                        <span class="page-link text-success" th:unless="${currentPage < totalPages}">Next</span>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link text-success" th:if="${currentPage < totalPages}" th:href="@{'/transaction?pageNumber=' + ${totalPages}}">Last</a>
+                        <span class="page-link text-success" th:unless="${currentPage < totalPages}">Last</span>
+                      </li>
+                    </ul>
+                  </div>
+      </div>
+    </div>
+
     </div>
   </div>
 

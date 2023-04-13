@@ -47,8 +47,7 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="home.html">Home</a></li>
-        <li class="breadcrumb-item"><a class="text-dark text-decoration-none" href="profile.html">Profile</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a class="text-success text-decoration-none" href="account.html">Account</a></li>
+        <li class="breadcrumb-item"><a class="text-dark text-decoration-none" th:href="@{/user?pageNumber=1}">User</a></li>
       </ol>
     </nav>
   </div>
@@ -111,14 +110,14 @@
           </tbody>
           <div th:if="${userSize > 0}">
             <tbody>
-            <tr th:each="user : ${searchUsers}">
-              <td th:text="${user.firstname}"></td>
-              <td th:text="${user.lastname}"></td>
-              <td class="align center" th:text="${user.email}"></td>
-              <td>
-                <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${user.id})}">Add</a>
-              </td>
-            </tr>
+              <tr th:each="user : ${searchUsers}">
+                <td th:text="${user.firstname}"></td>
+                <td th:text="${user.lastname}"></td>
+                <td class="align center" th:text="${user.email}"></td>
+                <td>
+                  <a class="text-decoration-none badge rounded-pill bg-success" th:href="@{/addUser/{friendId}(friendId=${user.id})}">Add</a>
+                </td>
+              </tr>
             </tbody>
           </div>
         </table>

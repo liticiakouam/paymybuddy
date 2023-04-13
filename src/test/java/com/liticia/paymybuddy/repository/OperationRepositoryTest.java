@@ -31,7 +31,7 @@ public class OperationRepositoryTest {
 
     @Test
     void testShouldSaveBankAccount() {
-        Operation operation = Operation.builder().amount(10000.0).operationType(OperationType.CREDIT).build();
+        Operation operation = Operation.builder().amount(10000).operationType(OperationType.CREDIT).build();
         Operation operationSave = operationRepository.save(operation);
 
         assertEquals(OperationType.CREDIT, operationSave.getOperationType());
