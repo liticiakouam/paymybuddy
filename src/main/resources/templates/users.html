@@ -74,7 +74,12 @@
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div th:if="${userExist}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
+        <div th:if="${notSupported}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${notSupported}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${contactExist}" class="mx-auto float-end alert alert-danger alert-dismissible fade show" role="alert">
           <span th:text="${userExist}"></span>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

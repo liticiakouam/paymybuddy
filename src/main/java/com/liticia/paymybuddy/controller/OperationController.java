@@ -8,7 +8,7 @@ import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.dto.OperationCreate;
 import com.liticia.paymybuddy.exception.BankAccountNotFoundException;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
-import com.liticia.paymybuddy.exception.NotSupportedOperationException;
+import com.liticia.paymybuddy.exception.NotSupportedActionException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,7 +68,7 @@ public class OperationController {
                operationService.debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
                redirectAttributes.addFlashAttribute("debit", "Account successfully debited!");
            } else {
-               throw new NotSupportedOperationException();
+               throw new NotSupportedActionException();
            }
        } catch (InsufficientBalanceException ex) {
            redirectAttributes.addFlashAttribute("balanceError","Sorry, your balance is insufficient");
@@ -77,7 +77,7 @@ public class OperationController {
        } catch (UserNotFoundException ex) {
            redirectAttributes.addFlashAttribute("userNotFound","User not found, retry");
            model.addAttribute("operations", operationService.getAll());
-       } catch (NotSupportedOperationException ex) {
+       } catch (NotSupportedActionException ex) {
            redirectAttributes.addFlashAttribute("operationNotSupported","Sorry, thi operation is not supported");
            model.addAttribute("operations", operationService.getAll());
        } catch (BankAccountNotFoundException ex) {

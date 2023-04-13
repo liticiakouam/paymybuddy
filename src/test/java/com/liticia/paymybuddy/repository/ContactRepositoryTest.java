@@ -3,7 +3,6 @@ package com.liticia.paymybuddy.repository;
 import com.liticia.paymybuddy.Entity.Contact;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.ContactRepository;
-import com.liticia.paymybuddy.Repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -26,11 +25,13 @@ public class ContactRepositoryTest {
     private ContactRepository contactRepository;
 
     @Test
-    void testShouldFindUserByFriend() {
-        List<Contact> userFriend = contactRepository.findByUserFriend(User.builder().id(1).build());
+    void testShouldFindContactByPrincipalAndUserFriend() {
 
-        assertEquals(2, userFriend.size());
-        assertEquals("liti@gmail.com", userFriend.get(0).getUser().getEmail());
+        User userFriend = User.builder().id(1).firstname("anze").build();
+        User user = User.builder().id(1).firstname("anze").build();
+        List<Contact> contacts = contactRepository.findByUserAndUserFriend(user, userFriend);
+
+        assertEquals(0, contacts.size());
     }
     @Test
     void testShouldDeleteContact() {

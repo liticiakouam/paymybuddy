@@ -5,7 +5,9 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.ContactService;
-import com.liticia.paymybuddy.exception.UserAlreadyExistException;
+import com.liticia.paymybuddy.exception.ContactAlreadyExistException;
+import com.liticia.paymybuddy.exception.ContactNotFoundException;
+import com.liticia.paymybuddy.exception.NotSupportedActionException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
@@ -30,16 +32,25 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void save(long friendId) {
         Optional<User> friendUser = userRepository.findById(friendId);
-        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
-        List<Contact> optionalContact = contactRepository.findByUserFriend(friendUser.get());
-
-        if (optionalContact.size() > 0) {
-            throw new UserAlreadyExistException();
+        if (friendUser.isEmpty()) {
+            throw new UserNotFoundException();
         }
 
+        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
         }
+
+        List<Contact> optionalContact = contactRepository.findByUserAndUserFriend(optionalUser.get(), friendUser.get());
+
+        if (optionalContact.size() > 0) {
+            throw new ContactAlreadyExistException();
+        }
+
+        if (optionalUser.get().equals(friendUser.get())) {
+            throw new NotSupportedActionException();
+        }
+
         Contact contact = new Contact();
         contact.setUser(optionalUser.get());
         contact.setUserFriend(friendUser.get());
