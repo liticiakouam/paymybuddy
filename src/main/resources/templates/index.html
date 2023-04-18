@@ -19,39 +19,25 @@
 </head>
 
 <body>
-<main id="main" class="main">
-    <section class="">
-        <div class="">
-            <h3 class="text-center">Please choose to continue</h3>
+    <div class="container">
+    <div class="mb-4" style="margin-top: 200px;">
+        <h3 class="text-center">Please choose to continue</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+                <a th:href="@{/register}" href="" class="btn btn-success">Sign Up</a>
+            </div>
         </div>
-        <!-- Left side columns -->
-        <div class="row">
-
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-6">
-                <div class="card info-card sales-card">
-                    <a th:href="@{/register}" href="" class="btn btn-success">Sign Up</a>
-                </div>
-            </div><!-- End Sales Card -->
-            <div class="col-xxl-4 col-md-6">
-                <div class="card info-card sales-card">
-                    <a th:href="@{/login}" href="" class="btn btn-success">Sign In</a>
-                </div>
-            </div><!-- End Sales Card -->
-
-            <div class="col-xxl-4 col-md-6">
-                <div class="card info-card sales-card">
-                    <a th:href="@{/home}" href="" class="btn btn-success">Home</a>
-                </div>
-            </div><!-- End Sales Card -->
+        <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+                <a th:href="@{/login}" href="" class="btn btn-success">Sign In</a>
+            </div>
         </div>
-
-        </div>
-    </section>
-
-</main><!-- End #main -->
+    </div>
 
 
+</div>
 </body>
-
 </html>
