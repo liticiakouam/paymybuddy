@@ -21,11 +21,9 @@ import java.util.List;
 @Controller
 public class LoginController {
     private UserService userService;
-    private final PasswordEncoder bCryptPasswordEncoder;
 
     public LoginController(UserService userService, PasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
@@ -56,8 +54,6 @@ public class LoginController {
             model.addAttribute("user", userDto);
             return "/register";
         }
-     /*   String password = userDto.getPassword();
-        userDto.setPassword(bCryptPasswordEncoder.encode(password));*/
         userService.saveUser(userDto);
         return "redirect:/register?success";
     }
