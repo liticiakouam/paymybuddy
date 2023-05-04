@@ -1,6 +1,7 @@
 package com.liticia.paymybuddy.Service;
 
 import com.liticia.paymybuddy.Entity.User;
+import com.liticia.paymybuddy.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,4 +13,8 @@ public interface UserService {
     List<User> search(String keyword);
     Page<User> findPaginated(Pageable pageable);
     Optional<User> findById(long id);
+
+    User findUserByEmail(String email);
+
+    void saveUser(UserDto userDto);
 }

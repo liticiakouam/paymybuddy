@@ -3,10 +3,13 @@ package com.liticia.paymybuddy.Service.impl;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.UserService;
+import com.liticia.paymybuddy.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +38,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findById(long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+
+    @Override
+    public void saveUser(UserDto userDto) {
+        User user = new User();
+
+        user.setLastname(userDto.getLastname());
+        user.setFirstname(userDto.getFirstname());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+
+        userRepository.save(user);
     }
 }
