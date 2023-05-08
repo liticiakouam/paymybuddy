@@ -27,13 +27,10 @@
           <a class="nav-link" th:href="@{/transaction?pageNumber=1}">Transfer</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/profile}">Profile</a>
+          <a class="nav-link" th:href="@{/profile}">My Account</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">Log Out</a>
+          <a class="nav-link" th:href="@{/logout}">Log Out</a>
         </li>
       </ul>
     </div>
@@ -80,7 +77,7 @@
       </div>
 
       <div  class="card-body">
-        <form class="row"  enctype="multipart/form-data"  th:action="@{/transaction/add}" method="POST" th:object="${transaction}">
+        <form class="row" th:action="@{/transaction/add}" method="POST" th:object="${transaction}">
            <div th:if="${contacts}" class="col-md-3">
                 <select class="form-control" th:field="*{contactId}">
                   <option th:each="contact : ${contacts}"

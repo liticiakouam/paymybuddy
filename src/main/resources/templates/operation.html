@@ -27,13 +27,10 @@
                     <a class="nav-link" th:href="@{/transaction?pageNumber=1}">Transfer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/profile}">Profile</a>
+                    <a class="nav-link" th:href="@{/profile}">My Account</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">Log Out</a>
+                    <a class="nav-link" th:href="@{/logout}">Log Out</a>
                 </li>
             </ul>
         </div>
@@ -50,7 +47,7 @@
                     <li class="breadcrumb-item active" aria-current="page"><a th:href="@{/operation?pageNumber=1}" class="text-success text-decoration-none">Operation</a></li>
                 </ol>
             </nav>
-       </div><!-- End Page Title -->
+       </div>
 
        <div class="row">
         <div class="col-xl-3 bg-white ">

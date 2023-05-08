@@ -20,9 +20,8 @@ import static org.mockito.Mockito.*;
 public class UserServiceImplTest {
 
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
-    private final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
     private final PasswordEncoder bCryptPasswordEncoder = Mockito.mock(PasswordEncoder.class);
-    private final UserService userService = new UserServiceImpl(userRepository, roleRepository, bCryptPasswordEncoder);
+    private final UserService userService = new UserServiceImpl(userRepository, bCryptPasswordEncoder);
 
     @Test
     void testShouldReturnUsers() {
