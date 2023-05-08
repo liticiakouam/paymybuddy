@@ -13,8 +13,7 @@ public interface UserService {
     List<User> search(String keyword);
     Page<User> findPaginated(Pageable pageable);
     Optional<User> findById(long id);
-
     User findUserByEmail(String email);
-
     void saveUser(UserDto userDto);
+    User editUserInfo(long id);
 }

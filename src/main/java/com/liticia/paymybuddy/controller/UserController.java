@@ -3,6 +3,7 @@ package com.liticia.paymybuddy.controller;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.dto.ContactCreated;
+import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,15 +11,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
 public class UserController {
-
     @Autowired
     private UserService userService;
 
@@ -58,6 +57,13 @@ public class UserController {
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("users", users);
         return "users";
+    }
+
+    @GetMapping("/profile")
+    public String showEditForm(Model model) {
+        User user = userService.findById(SecurityUtils.getCurrentUserId()).get();
+        model.addAttribute("user", user);
+        return "profile";
     }
 
 }
