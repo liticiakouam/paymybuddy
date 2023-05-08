@@ -3,6 +3,7 @@ package com.liticia.paymybuddy.security;
 import com.liticia.paymybuddy.Entity.Role;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.UserRepository;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,9 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findUserByEmail(email);
 
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(user.getEmail(),
-                    user.getPassword(),
-                    new ArrayList<>());
+            return new AuthUser(user.getId(), user.getEmail(), user.getPassword(), new ArrayList<>());
         } else {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
