@@ -49,7 +49,7 @@
                     You have successfully registered our app!
                   </div>
                 </div>
-                <form  class="row g-3 needs-validation" th:action="@{/register/save}" th:object="${user}" method="post">
+                <form  th:action="@{/register}" th:object="${user}" method="post">
 
                   <div class="col-12">
                     <label for="firstname" class="form-label">Your FirstName</label>

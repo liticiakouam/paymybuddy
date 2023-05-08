@@ -1,6 +1,5 @@
 package com.liticia.paymybuddy.Service.impl;
 
-import com.liticia.paymybuddy.Entity.Role;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.RoleRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +17,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -59,8 +57,7 @@ public class UserServiceImpl implements UserService {
         user.setLastname(userDto.getLastname());
         user.setFirstname(userDto.getFirstname());
         user.setEmail(userDto.getEmail());
-//        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         userRepository.save(user);
     }

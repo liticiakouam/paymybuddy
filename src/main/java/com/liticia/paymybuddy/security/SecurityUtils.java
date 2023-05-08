@@ -1,6 +1,6 @@
 package com.liticia.paymybuddy.security;
 
-import com.liticia.paymybuddy.Entity.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtils {
     public static long getCurrentUserId() {

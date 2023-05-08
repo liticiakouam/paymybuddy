@@ -48,15 +48,15 @@
                   <div class="alert alert-danger">Invalid Email or Password</div>
                 </div>
                 <div th:if="${param.logout}">
-                  <div class="alert alert-success"> You have been logged out.</div>
+                  <div class="alert alert-success"> You have been logged out</div>
                 </div>
 
-                <form class="row g-3 needs-validation">
+                <form th:action="@{/login}" method="post">
                   <div class="col-12">
                     <label class="form-label">Email</label>
                     <div class="input-group has-validation">
                       <span class="input-group-text" id="inputGroupPrepend">@</span>
-                      <input type="text" name="email" class="form-control" id="email" required>
+                      <input type="text" name="username" class="form-control" id="email" required>
                     </div>
                   </div>
 
@@ -80,13 +80,10 @@
                 </form>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-
     </section>
-
   </div>
 </main>
 

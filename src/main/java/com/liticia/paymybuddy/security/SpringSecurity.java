@@ -12,12 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
 @EnableWebSecurity
 public class SpringSecurity {
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
@@ -26,10 +25,12 @@ public class SpringSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        return http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.antMatchers("/", "/register").permitAll()
+                        authorize.antMatchers( "/register").permitAll()
                                 .antMatchers("/login").permitAll()
+                                .anyRequest()
+                                .authenticated()
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
@@ -40,8 +41,7 @@ public class SpringSecurity {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
-        return http.build();
+                ).build();
     }
 
     @Autowired
