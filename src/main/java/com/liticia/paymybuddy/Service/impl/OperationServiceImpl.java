@@ -51,7 +51,7 @@ public class OperationServiceImpl implements OperationService {
         user.setBalance(user.getBalance() + amount);
         userRepository.save(user);
 
-        Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountNumber(accountNumber);
+        Optional<BankAccount> bankAccount = bankAccountRepository.findByUserAndAccountNumber(optionalUser.get(), accountNumber);
         if (bankAccount.isEmpty()) {
             throw new BankAccountNotFoundException();
         }
@@ -81,7 +81,7 @@ public class OperationServiceImpl implements OperationService {
         user.setBalance(user.getBalance() - amount);
         userRepository.save(user);
 
-        Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountNumber(accountNumber);
+        Optional<BankAccount> bankAccount = bankAccountRepository.findByUserAndAccountNumber(optionalUser.get(), accountNumber);
         if (bankAccount.isEmpty()) {
             throw new BankAccountNotFoundException();
         }
@@ -96,7 +96,8 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Page<Operation> findPaginated(Pageable pageable) {
-        return operationRepository.findAllByOrderByOperationDateDesc(pageable);
+    public Page<Operation> findAll(Pageable pageable) {
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        return operationRepository.findAllByUserOrderByOperationDateDesc(currentUser.get(), pageable);
     }
 }

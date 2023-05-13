@@ -16,7 +16,6 @@ import javax.validation.Valid;
 @Controller
 public class LoginController {
     private UserService userService;
-
     public LoginController(UserService userService, PasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
     }

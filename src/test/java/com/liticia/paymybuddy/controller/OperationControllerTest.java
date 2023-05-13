@@ -11,6 +11,7 @@ import com.liticia.paymybuddy.exception.InsufficientBalanceException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = {OperationController.class})
+@WebMvcTest(controllers = {OperationController.class},
+        excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class OperationControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -51,7 +53,7 @@ public class OperationControllerTest {
         );
         Page<Operation> page = new PageImpl<>(operations);
 
-        when(operationService.findPaginated(any(Pageable.class))).thenReturn(page);
+        when(operationService.findAll(any(Pageable.class))).thenReturn(page);
         when(bankAccountService.findActiveBankAccount()).thenReturn(bankAccounts);
 
          mockMvc.perform(get("/operation?pageNumber=1"))

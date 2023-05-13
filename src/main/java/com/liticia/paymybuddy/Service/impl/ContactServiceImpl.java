@@ -6,7 +6,6 @@ import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.ContactService;
 import com.liticia.paymybuddy.exception.ContactAlreadyExistException;
-import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.NotSupportedActionException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
@@ -36,23 +35,23 @@ public class ContactServiceImpl implements ContactService {
             throw new UserNotFoundException();
         }
 
-        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
-        if (optionalUser.isEmpty()) {
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        if (currentUser.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        List<Contact> optionalContact = contactRepository.findByUserAndUserFriend(optionalUser.get(), friendUser.get());
+        List<Contact> optionalContact = contactRepository.findByUserAndUserFriend(currentUser.get(), friendUser.get());
 
         if (optionalContact.size() > 0) {
             throw new ContactAlreadyExistException();
         }
 
-        if (optionalUser.get().equals(friendUser.get())) {
+        if (currentUser.get().equals(friendUser.get())) {
             throw new NotSupportedActionException();
         }
 
         Contact contact = new Contact();
-        contact.setUser(optionalUser.get());
+        contact.setUser(currentUser.get());
         contact.setUserFriend(friendUser.get());
         contact.setCreatedAt(new Date());
 
@@ -61,7 +60,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Page<Contact> findPaginated(Pageable pageable) {
-        return contactRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        return contactRepository.findAllByUserOrderByCreatedAtDesc(currentUser.get(), pageable);
     }
 
     @Override
@@ -71,7 +71,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<Contact> getAll() {
-        return contactRepository.findAll();
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        return contactRepository.findAllByUser(currentUser.get());
     }
 
     @Override

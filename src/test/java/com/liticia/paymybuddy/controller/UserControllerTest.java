@@ -4,6 +4,7 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -19,14 +20,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = {UserController.class})
+@WebMvcTest(controllers = {UserController.class},
+        excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private UserService userService;
-
 
     @Test
     public void testShouldVerifyThatControllerReturnOkStatusAndUserLengthIsCorrect() throws Exception {

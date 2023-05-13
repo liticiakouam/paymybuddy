@@ -1,9 +1,8 @@
 package com.liticia.paymybuddy.repository;
 
-import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.Operation;
 import com.liticia.paymybuddy.Entity.OperationType;
-import com.liticia.paymybuddy.Repository.BankAccountRepository;
+import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.OperationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,7 +37,7 @@ public class OperationRepositoryTest {
     @Test
     void testShouldReturnBankAccountsOrderByCreatedAtDesc() {
         Pageable pageable = PageRequest.of(1, 2);
-        Page<Operation> accountByCreatedAtDesc = operationRepository.findAllByOrderByOperationDateDesc(pageable);
+        Page<Operation> accountByCreatedAtDesc = operationRepository.findAllByUserOrderByOperationDateDesc(User.builder().build(), pageable);
 
         assertEquals(2, accountByCreatedAtDesc.getTotalElements());
         assertEquals(1, accountByCreatedAtDesc.getTotalPages());

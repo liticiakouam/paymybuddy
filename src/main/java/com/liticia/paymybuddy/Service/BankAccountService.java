@@ -17,6 +17,4 @@ public interface BankAccountService {
     void switchAccountStatus(String accountNumber);
 
     List<BankAccount> findActiveBankAccount();
-
-    Optional<BankAccount> findBankAccount(String accounNumber);
 }

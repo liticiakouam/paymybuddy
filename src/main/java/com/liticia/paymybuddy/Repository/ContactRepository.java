@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     List<Contact> findByUserAndUserFriend(User user, User userFriend);
-    Page<Contact> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    List<Contact> findAllByUser(User user);
+    Page<Contact> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 }
