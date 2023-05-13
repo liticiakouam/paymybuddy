@@ -9,8 +9,11 @@ import com.liticia.paymybuddy.Service.impl.BankAccountServiceImpl;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
 import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
 import com.liticia.paymybuddy.exception.BankAccountNotFoundException;
+import com.liticia.paymybuddy.security.SecurityUtils;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.springframework.security.core.Authentication;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +26,9 @@ public class BankAccountServiceImplTest {
 
     private final BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final Authentication authentication = Mockito.mock(Authentication.class);
     private final BankAccountService bankAccountService = new BankAccountServiceImpl(bankAccountRepository, userRepository);
+    MockedStatic<SecurityUtils> securityUtils = Mockito.mockStatic(SecurityUtils.class);
 
     @Test
     void testShouldReturnBankAccounts() {
@@ -40,12 +45,16 @@ public class BankAccountServiceImplTest {
 
     @Test
     void testShouldThrowExceptionWhenBankAccountAlreadyExist() {
+        User user = User.builder().firstname("liticia").lastname("anz").balance(1000).build();
         BankAccount bankAccount = BankAccount.builder().accountNumber("IU13BONE").build();
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(bankAccount));
+
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(bankAccountRepository.findByUserAndAccountNumber(user,"IU13BONE")).thenReturn(Optional.of(bankAccount));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         assertThrows(BankAccountAlreadyExist.class, ()->bankAccountService.save(BankAccountCreate.builder().accountNumber("IU13BONE").build()));
 
-        verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
+        verify(bankAccountRepository, times(1)).findByUserAndAccountNumber(user, "IU13BONE");
     }
 
     @Test
@@ -56,29 +65,38 @@ public class BankAccountServiceImplTest {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountNumber(bankAccountCreate.getAccountNumber());
         when(userRepository.findById(2L)).thenReturn(Optional.of(user));
-        when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         bankAccountService.save(bankAccountCreate);
     }
 
     @Test
     void testShouldThrowExceptionWhenBankAccountNotExist() {
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.empty());
-        assertThrows(BankAccountNotFoundException.class, ()->bankAccountService.switchAccountStatus("IU13BONE"));
+        BankAccount bankAccount = BankAccount.builder().accountNumber("IU13BONE").active(true).build();
+        bankAccount.setActive(!bankAccount.isActive());
+        User user = User.builder().firstname("liticia").lastname("anz").balance(1000).build();
 
-        verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(bankAccountRepository.findByUserAndAccountNumber(user,"IU19BONE")).thenReturn(Optional.of(bankAccount));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        bankAccountService.switchAccountStatus("IU13BONE");
+        verify(bankAccountRepository, times(1)).findByUserAndAccountNumber(User.builder().build(),"IU13BONE");
+        verify(bankAccountRepository, times(1)).save(bankAccount);
     }
 
     @Test
     void testShouldChangeExistingStatusOfTheBankAccount() {
         BankAccount bankAccount = BankAccount.builder().accountNumber("IU13BONE").active(true).build();
         bankAccount.setActive(!bankAccount.isActive());
+        User user = User.builder().firstname("liticia").lastname("anz").balance(1000).build();
 
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(bankAccount));
-        when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(bankAccountRepository.findByUserAndAccountNumber(user,"IU13BONE")).thenReturn(Optional.of(bankAccount));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         bankAccountService.switchAccountStatus("IU13BONE");
-        verify(bankAccountRepository, times(1)).findByAccountNumber("IU13BONE");
         verify(bankAccountRepository, times(1)).save(bankAccount);
     }
 
@@ -88,11 +106,14 @@ public class BankAccountServiceImplTest {
                 BankAccount.builder().active(true).build(),
                 BankAccount.builder().active(true).user(User.builder().id(2).build()).build()
         );
-        when(bankAccountRepository.findByActive(anyBoolean())).thenReturn(list);
+        User user = User.builder().firstname("liticia").lastname("anz").balance(1000).build();
+
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(bankAccountRepository.findByUserAndActive(user, true)).thenReturn(list);
 
         List<BankAccount> activeBankAccounts = bankAccountService.findActiveBankAccount();
 
         assertEquals(2, activeBankAccounts.size());
-        verify(bankAccountRepository, times(1)).findByActive(true);
     }
 }

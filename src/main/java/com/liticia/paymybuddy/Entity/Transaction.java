@@ -30,4 +30,8 @@ public class Transaction {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "contact_id", referencedColumnName = "contact_id")
     Contact contact;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

@@ -1,7 +1,10 @@
 package com.liticia.paymybuddy.repository;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
+import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
+import com.liticia.paymybuddy.security.AuthUser;
+import com.liticia.paymybuddy.security.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -44,17 +47,17 @@ public class BankAccountRepositoryTest {
 
     @Test
     void testShouldFindBankAccountWithAnAccountNumber() {
-        Optional<BankAccount> accountNumber = bankAccountRepository.findByAccountNumber("IU12BONE");
+        Optional<BankAccount> accountNumber = bankAccountRepository.findByUserAndAccountNumber(User.builder().id(2).build(),"IU12BONE");
         assertTrue(accountNumber.isPresent());
 
-        Optional<BankAccount> accountNumb = bankAccountRepository.findByAccountNumber("IU1222BONE");
+        Optional<BankAccount> accountNumb = bankAccountRepository.findByUserAndAccountNumber(User.builder().id(2).build(), "IU1222BONE");
         assertTrue(accountNumb.isEmpty());
     }
 
     @Test
     void testShouldReturnBankAccountsOrderByCreatedAtDesc() {
         Pageable pageable = PageRequest.of(1, 2);
-        Page<BankAccount> accountByCreatedAtDesc = bankAccountRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<BankAccount> accountByCreatedAtDesc = bankAccountRepository.findAllByUserOrderByCreatedAtDesc(User.builder().id(2).build(), pageable);
 
         assertEquals(5, accountByCreatedAtDesc.getTotalElements());
         assertEquals(3, accountByCreatedAtDesc.getTotalPages());
@@ -62,7 +65,7 @@ public class BankAccountRepositoryTest {
 
     @Test
     void testShouldReturnActiveBankAccounts() {
-        List<BankAccount> bankAccounts = bankAccountRepository.findByActive(true);
+        List<BankAccount> bankAccounts = bankAccountRepository.findByUserAndActive(User.builder().id(2).build(), true);
 
         assertEquals(3, bankAccounts.size());
         assertEquals("IU13BONE", bankAccounts.get(0).getAccountNumber());

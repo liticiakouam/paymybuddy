@@ -42,7 +42,7 @@ public class OperationController {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
-        Page<Operation> page = operationService.findPaginated(pageable);
+        Page<Operation> page = operationService.findAll(pageable);
         List<Operation> operations = page.getContent();
         List<BankAccount> bankAccounts = bankAccountService.findActiveBankAccount();
 

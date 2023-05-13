@@ -10,6 +10,8 @@ import com.liticia.paymybuddy.Service.TransactionService;
 import com.liticia.paymybuddy.dto.TransactionCreate;
 import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.exception.UserNotFoundException;
+import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,12 +41,19 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Page<Transaction> findAll(Pageable pageable) {
-        return transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        return transactionRepository.findAllByUserOrderByTransactionDateDesc(currentUser.get(), pageable);
     }
 
     @Transactional
     @Override
     public void save(TransactionCreate transactionCreate) {
+        Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+        if(optionalUser.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        User currentUser = optionalUser.get();
+
         Optional<Contact> optionalContact = contactRepository.findById(transactionCreate.getContactId());
         if (optionalContact.isEmpty()) {
             throw new ContactNotFoundException();
@@ -69,6 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setDebitedAmount(debitedAmount);
         transaction.setAmount(transactionCreate.getAmount());
         transaction.setTransactionDate(new Date());
+        transaction.setUser(currentUser);
 
         transactionRepository.save(transaction);
     }

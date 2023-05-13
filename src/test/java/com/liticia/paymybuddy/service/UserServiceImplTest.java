@@ -7,6 +7,7 @@ import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.Service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
@@ -21,6 +22,8 @@ public class UserServiceImplTest {
 
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
     private final PasswordEncoder bCryptPasswordEncoder = Mockito.mock(PasswordEncoder.class);
+    private final Authentication authentication = Mockito.mock(Authentication.class);
+
     private final UserService userService = new UserServiceImpl(userRepository, bCryptPasswordEncoder);
 
     @Test
@@ -38,7 +41,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testSholdReturnUsers() {
+    void testShouldSearchUsers() {
         List<User> users = Collections.singletonList(
                 User.builder().firstname("liticia").lastname("anzwe").balance(1000).build()
         );

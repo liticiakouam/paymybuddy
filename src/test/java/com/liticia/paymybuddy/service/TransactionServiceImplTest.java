@@ -11,9 +11,14 @@ import com.liticia.paymybuddy.dto.TransactionCreate;
 import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
+import com.liticia.paymybuddy.security.SecurityUtils;
+import org.hibernate.mapping.Any;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.springframework.security.core.Authentication;
 
+import java.security.Security;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +32,7 @@ public class TransactionServiceImplTest {
     private final ContactRepository contactRepository = Mockito.mock(ContactRepository.class);
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
     private final TransactionRepository transactionRepository = Mockito.mock(TransactionRepository.class);
+    MockedStatic<SecurityUtils> securityUtils = Mockito.mockStatic(SecurityUtils.class);
 
     private final TransactionService transactionService = new TransactionServiceImpl(transactionRepository, contactRepository, userRepository);
 
@@ -51,33 +57,40 @@ public class TransactionServiceImplTest {
         TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).amount(500).build();
         Contact contact = Contact.builder().id(1).user(user).userFriend(userFriend).build();
 
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(userFriend));
         when(contactRepository.findById(1L)).thenReturn(Optional.of(contact));
-        when(userRepository.save(user)).thenReturn(user);
-        when(userRepository.save(userFriend)).thenReturn(userFriend);
 
         transactionService.save(transactionCreate);
     }
 
     @Test
     void testShouldThrowInsufficientBalanceException()  {
-        User user = User.builder().firstname("liticia").lastname("anz").balance(1000).build();
-        User userFriend = User.builder().firstname("lit").lastname("anz").balance(2000).build();
+        User user = User.builder().id(1L).firstname("liticia").lastname("anz").balance(1000).build();
+        User userFriend = User.builder().id(2L).firstname("lit").lastname("anz").balance(2000).build();
 
-        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).amount(5000).build();
+        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).subject("depot").amount(5000).build();
         Contact contact = Contact.builder().id(1).user(user).userFriend(userFriend).build();
 
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
         when(contactRepository.findById(1L)).thenReturn(Optional.of(contact));
-        when(userRepository.save(user)).thenReturn(user);
-        when(userRepository.save(userFriend)).thenReturn(userFriend);
-
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(userFriend));
         assertThrows(InsufficientBalanceException.class, ()->transactionService.save(transactionCreate));
     }
 
     @Test
     void testShouldThrowContactNotFoundException()  {
         Contact contact = Contact.builder().id(2).build();
+        User user = User.builder().id(1L).firstname("liticia").lastname("anz").balance(1000).build();
+        User userFriend = User.builder().id(1L).firstname("lit").lastname("anz").balance(2000).build();
 
-        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(1).amount(5000).build();
+        TransactionCreate transactionCreate = TransactionCreate.builder().contactId(2).subject("depot").amount(5000).build();
+
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(userFriend));
         when(contactRepository.findById(5L)).thenReturn(Optional.of(contact));
 
         assertThrows(ContactNotFoundException.class, ()->transactionService.save(transactionCreate));

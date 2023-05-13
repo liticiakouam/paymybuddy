@@ -12,7 +12,9 @@ import com.liticia.paymybuddy.Service.impl.OperationServiceImpl;
 import com.liticia.paymybuddy.dto.OperationCreate;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
 import com.liticia.paymybuddy.exception.UserNotFoundException;
+import com.liticia.paymybuddy.security.SecurityUtils;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
@@ -28,6 +30,7 @@ public class OperationServiceImplTest {
     private final BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
     private final OperationRepository operationRepository = Mockito.mock(OperationRepository.class);
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    MockedStatic<SecurityUtils> securityUtils = Mockito.mockStatic(SecurityUtils.class);
     private final OperationService operationService = new OperationServiceImpl(operationRepository, bankAccountRepository, userRepository);
 
     @Test
@@ -51,8 +54,10 @@ public class OperationServiceImplTest {
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
 
+
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(2L);
         when(userRepository.findById(2L)).thenReturn(Optional.of(user));
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        when(bankAccountRepository.findByUserAndAccountNumber(user,"IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
         operationService.creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
@@ -66,8 +71,9 @@ public class OperationServiceImplTest {
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
 
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(2L);
         when(userRepository.findById(2L)).thenReturn(Optional.of(user));
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        when(bankAccountRepository.findByUserAndAccountNumber(user, "IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
         operationService.debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber());
@@ -82,8 +88,9 @@ public class OperationServiceImplTest {
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
 
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(2L);
         when(userRepository.findById(2L)).thenReturn(Optional.of(user));
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        when(bankAccountRepository.findByUserAndAccountNumber(user, "IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
         assertThrows(InsufficientBalanceException.class, ()->operationService.debitAccount(operationCreate.getAmount(), operationCreate.getAccountNumber()));
@@ -96,7 +103,8 @@ public class OperationServiceImplTest {
         Operation operation = new Operation();
         operation.setAmount(operationCreate.getAmount());
 
-        when(bankAccountRepository.findByAccountNumber("IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
+        securityUtils.when(SecurityUtils::getCurrentUserId).thenReturn(2L);
+        when(bankAccountRepository.findByUserAndAccountNumber(User.builder().build(), "IU13BONE")).thenReturn(Optional.of(BankAccount.builder().build()));
         when(operationRepository.save(operation)).thenReturn(operation);
 
         assertThrows(UserNotFoundException.class, ()->operationService.creditAccount(operationCreate.getAmount(), operationCreate.getAccountNumber()));

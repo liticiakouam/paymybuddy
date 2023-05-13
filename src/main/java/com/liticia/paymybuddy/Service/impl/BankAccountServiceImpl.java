@@ -36,14 +36,14 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public void save(BankAccountCreate bankAccountCreate) {
-        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(bankAccountCreate.getAccountNumber());
-        if (optionalBankAccount.isPresent()) {
-            throw new BankAccountAlreadyExist();
-        }
-
         Optional<User> optionalUser = userRepository.findById(SecurityUtils.getCurrentUserId());
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
+        }
+
+        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByUserAndAccountNumber(optionalUser.get(), bankAccountCreate.getAccountNumber());
+        if (optionalBankAccount.isPresent()) {
+            throw new BankAccountAlreadyExist();
         }
 
         BankAccount bankAccount = new BankAccount();
@@ -57,12 +57,16 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public Page<BankAccount> findPaginated(Pageable pageable) {
-        return bankAccountRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+
+        return bankAccountRepository.findAllByUserOrderByCreatedAtDesc(currentUser.get(), pageable);
     }
 
     @Override
     public void switchAccountStatus(String accountNumber) {
-        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByAccountNumber(accountNumber);
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
+
+        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByUserAndAccountNumber(currentUser.get(), accountNumber);
         if (optionalBankAccount.isEmpty()) {
             throw new BankAccountNotFoundException();
         }
@@ -74,11 +78,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public List<BankAccount> findActiveBankAccount() {
-        return bankAccountRepository.findByActive(true);
-    }
+        Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
 
-    @Override
-    public Optional<BankAccount> findBankAccount(String accounNumber) {
-        return bankAccountRepository.findByAccountNumber(accounNumber);
+        return bankAccountRepository.findByUserAndActive(currentUser.get(), true);
     }
 }

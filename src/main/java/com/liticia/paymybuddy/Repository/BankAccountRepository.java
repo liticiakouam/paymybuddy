@@ -1,6 +1,7 @@
 package com.liticia.paymybuddy.Repository;
 
 import com.liticia.paymybuddy.Entity.BankAccount;
+import com.liticia.paymybuddy.Entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Integer> {
-    Optional<BankAccount> findByAccountNumber(String accountNumber);
-    List<BankAccount> findByActive(Boolean active);
-    Page<BankAccount> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Optional<BankAccount> findByUserAndAccountNumber(User user, String accountNumber);
+    List<BankAccount> findByUserAndActive(User user, Boolean active);
+    Page<BankAccount> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 }
