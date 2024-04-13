@@ -9,13 +9,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
-@Builder @NoArgsConstructor @AllArgsConstructor
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "operation")
 public class Operation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

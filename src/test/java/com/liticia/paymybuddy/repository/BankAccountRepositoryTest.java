@@ -3,8 +3,6 @@ package com.liticia.paymybuddy.repository;
 import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.BankAccountRepository;
-import com.liticia.paymybuddy.security.AuthUser;
-import com.liticia.paymybuddy.security.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

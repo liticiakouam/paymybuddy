@@ -42,7 +42,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Page<Transaction> findAll(Pageable pageable) {
         Optional<User> currentUser = userRepository.findById(SecurityUtils.getCurrentUserId());
-        return transactionRepository.findAllByUserOrderByTransactionDateDesc(currentUser.get(), pageable);
+
+        return transactionRepository.findAllByPrincipalUserOrderByTransactionDateDesc(currentUser.get(), pageable);
+
     }
 
     @Transactional
@@ -74,12 +76,22 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = Transaction.builder().build();
         transaction.setSubject(transactionCreate.getSubject());
-        transaction.setContact(optionalContact.get());
+        transaction.setUser(userFriend);
         transaction.setDebitedAmount(debitedAmount);
         transaction.setAmount(transactionCreate.getAmount());
         transaction.setTransactionDate(new Date());
-        transaction.setUser(currentUser);
+        transaction.setPrincipalUser(currentUser);
 
         transactionRepository.save(transaction);
+
+        Transaction transaction1 = Transaction.builder().build();
+        transaction1.setSubject(transactionCreate.getSubject());
+        transaction1.setUser(currentUser);
+        transaction1.setDebitedAmount(debitedAmount);
+        transaction1.setAmount(transactionCreate.getAmount());
+        transaction1.setTransactionDate(new Date());
+        transaction1.setPrincipalUser(userFriend);
+
+        transactionRepository.save(transaction1);
     }
 }

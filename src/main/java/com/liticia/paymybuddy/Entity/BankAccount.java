@@ -7,12 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -23,11 +18,12 @@ import java.util.List;
 public class BankAccount {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String accountNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private  User user;
+    private User user;
 
     private boolean active = true;
 

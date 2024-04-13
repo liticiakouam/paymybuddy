@@ -1,6 +1,5 @@
 package com.liticia.paymybuddy.Repository;
 
-import com.liticia.paymybuddy.Entity.BankAccount;
 import com.liticia.paymybuddy.Entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

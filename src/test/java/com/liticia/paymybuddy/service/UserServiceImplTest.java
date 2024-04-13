@@ -1,7 +1,6 @@
 package com.liticia.paymybuddy.service;
 
 import com.liticia.paymybuddy.Entity.User;
-import com.liticia.paymybuddy.Repository.RoleRepository;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.Service.impl.UserServiceImpl;
@@ -15,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class UserServiceImplTest {
@@ -47,9 +45,9 @@ public class UserServiceImplTest {
         );
         when(userRepository.findByFirstnameContainingOrLastnameContaining("liti", "liti")).thenReturn(users);
 
-        List<User> searchUser = userService.search("liti");
-        assertEquals(1, searchUser.size());
-        assertEquals(1000.0, searchUser.get(0).getBalance());
+        List<User> searchUsers = userService.search("liti");
+        assertEquals(1, searchUsers.size());
+        assertEquals(1000.0, searchUsers.get(0).getBalance());
         verify(userRepository, times(1)).findByFirstnameContainingOrLastnameContaining("liti", "liti");
     }
 }

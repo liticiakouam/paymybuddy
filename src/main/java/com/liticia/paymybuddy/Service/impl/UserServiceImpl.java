@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
-
         userRepository.save(user);
     }
 

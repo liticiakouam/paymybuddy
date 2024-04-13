@@ -2,23 +2,16 @@ package com.liticia.paymybuddy.service;
 
 import com.liticia.paymybuddy.Entity.*;
 import com.liticia.paymybuddy.Repository.*;
-import com.liticia.paymybuddy.Service.OperationService;
 import com.liticia.paymybuddy.Service.TransactionService;
-import com.liticia.paymybuddy.Service.impl.OperationServiceImpl;
 import com.liticia.paymybuddy.Service.impl.TransactionServiceImpl;
-import com.liticia.paymybuddy.dto.OperationCreate;
 import com.liticia.paymybuddy.dto.TransactionCreate;
 import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
-import com.liticia.paymybuddy.exception.UserNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
-import org.hibernate.mapping.Any;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.springframework.security.core.Authentication;
 
-import java.security.Security;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

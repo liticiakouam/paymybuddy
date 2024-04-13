@@ -8,15 +8,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
-@Builder @NoArgsConstructor @AllArgsConstructor
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "contact")
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
     private long id;
 

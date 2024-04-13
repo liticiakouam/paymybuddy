@@ -133,7 +133,7 @@
                                 <th >Description </th>
                                 <th scope="col">Account Number</th>
                                 <th scope="col">Status</th>
-                                <th scope="col"><span class="float-end">Action</span></th>
+                                <th scope="col">Date</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -141,17 +141,14 @@
                                 <td th:text="${bankAccount.description}"></td>
                                 <td th:text="${bankAccount.accountNumber}"></td>
                                 <td>
-                                    <span th:if="${bankAccount.active == true}">Active</span>
-                                    <span th:unless="${bankAccount.active == true}">Inactive</span>
-                                </td>
-                                <td>
                                     <a th:if="${bankAccount.active == true}"
                                        th:href="@{/disable/{accountNumber}(accountNumber=${bankAccount.accountNumber})}"
-                                       class="text-decoration-none badge rounded-pill bg-danger float-end">Disable</a>
+                                       class="text-decoration-none badge rounded-pill bg-success">Enable</a>
                                     <a th:unless="${bankAccount.active == true}"
                                        th:href="@{/disable/{accountNumber}(accountNumber=${bankAccount.accountNumber})}"
-                                       class="text-decoration-none badge rounded-pill bg-success float-end">Enable</a>
+                                       class="text-decoration-none badge rounded-pill bg-danger">Disable</a>
                                 </td>
+                                <td th:text="${#dates.format(bankAccount.createdAt, 'dd-MM-yyyy')}"></td>
                             </tr>
                             </tbody>
                         </table>

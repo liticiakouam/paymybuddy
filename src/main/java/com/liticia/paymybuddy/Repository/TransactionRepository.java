@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    Page<Transaction> findAllByUserOrderByTransactionDateDesc(User user, Pageable pageable);
+    Page<Transaction> findAllByPrincipalUserOrderByTransactionDateDesc(User user, Pageable pageable);
 }

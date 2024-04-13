@@ -42,7 +42,7 @@ public class ContactServiceImpl implements ContactService {
 
         List<Contact> optionalContact = contactRepository.findByUserAndUserFriend(currentUser.get(), friendUser.get());
 
-        if (optionalContact.size() > 0) {
+        if (!optionalContact.isEmpty()) {
             throw new ContactAlreadyExistException();
         }
 
@@ -54,8 +54,13 @@ public class ContactServiceImpl implements ContactService {
         contact.setUser(currentUser.get());
         contact.setUserFriend(friendUser.get());
         contact.setCreatedAt(new Date());
-
         contactRepository.save(contact);
+
+        Contact contact1 = new Contact();
+        contact1.setUser(friendUser.get());
+        contact1.setUserFriend(currentUser.get());
+        contact1.setCreatedAt(new Date());
+        contactRepository.save(contact1);
     }
 
     @Override

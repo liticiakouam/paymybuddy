@@ -1,6 +1,8 @@
 package com.liticia.paymybuddy.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @EnableWebSecurity
 public class SpringSecurity {
@@ -29,6 +32,7 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.antMatchers( "/register").permitAll()
                                 .antMatchers("/login").permitAll()
+                                .antMatchers("/").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 ).formLogin(

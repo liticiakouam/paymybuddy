@@ -8,7 +8,6 @@ import com.liticia.paymybuddy.Service.BankAccountService;
 import com.liticia.paymybuddy.Service.impl.BankAccountServiceImpl;
 import com.liticia.paymybuddy.dto.BankAccountCreate;
 import com.liticia.paymybuddy.exception.BankAccountAlreadyExist;
-import com.liticia.paymybuddy.exception.BankAccountNotFoundException;
 import com.liticia.paymybuddy.security.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

@@ -12,9 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder @AllArgsConstructor @NoArgsConstructor
 public class BankAccountCreate {
     @Length(min = 7, message = "the minimum value is 7")
     @NotBlank(message = "please fill the column")

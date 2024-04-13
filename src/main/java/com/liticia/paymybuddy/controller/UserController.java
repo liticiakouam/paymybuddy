@@ -37,7 +37,7 @@ public class UserController {
             model.addAttribute("userSize", userSize);
         } else {
             redirectAttributes.addFlashAttribute("error", "sorry, there are no user existing with this word : " +keyword);
-            return "user?pageNumber=1";
+            return "redirect:/user?pageNumber=1";
         }
 
         return "users";

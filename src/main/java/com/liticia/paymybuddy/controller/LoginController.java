@@ -3,7 +3,7 @@ package com.liticia.paymybuddy.controller;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.dto.UserDto;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,16 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
+@AllArgsConstructor
 public class LoginController {
     private UserService userService;
-    public LoginController(UserService userService, PasswordEncoder bCryptPasswordEncoder) {
-        this.userService = userService;
-    }
 
-
-    @GetMapping("/")
+    @GetMapping({"/", " "})
     public String index(){
-        return "index";
+        return "landingPage";
     }
 
     @GetMapping("/register")
@@ -49,12 +46,14 @@ public class LoginController {
             return "/register";
         }
         userService.saveUser(userDto);
-        return "redirect:/register?success";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
     public String login(){
         return "login";
     }
+
+
 
 }

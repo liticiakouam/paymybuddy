@@ -44,34 +44,29 @@
                   <p class="text-center small">Enter your personal details to create account</p>
                 </div>
 
-                <div th:if="${param.success}">
-                  <div class="alert alert-info">
-                    You have successfully registered our app!
-                  </div>
-                </div>
                 <form  th:action="@{/register}" th:object="${user}" method="post">
 
                   <div class="col-12">
-                    <label for="firstname" class="form-label">Your FirstName</label>
+                    <label for="firstname" class="form-label">FirstName</label>
                     <input type="text" name="name" class="form-control" id="firstname" th:field="*{firstname}" required>
                     <p th:errors = "*{firstname}" class="text-danger"
                        th:if="${#fields.hasErrors('firstname')}"></p>
                   </div>
-
+                  <br>
                   <div class="col-12">
-                    <label for="lastname" class="form-label">Your LastName</label>
+                    <label for="lastname" class="form-label">LastName</label>
                     <input type="text" name="name" class="form-control" id="lastname" th:field="*{lastname}" required>
                     <p th:errors = "*{lastname}" class="text-danger"
                        th:if="${#fields.hasErrors('lastname')}"></p>
                   </div>
-
+                  <br>
                   <div class="col-12">
-                    <label for="email" class="form-label">Your Email</label>
+                    <label for="email" class="form-label">Email</label>
                     <input type="email" name="email" class="form-control" id="email" th:field="*{email}" required>
                     <p th:errors = "*{email}" class="text-danger"
                        th:if="${#fields.hasErrors('email')}"></p>
                   </div>
-
+                  <br>
                   <div class="col-12">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" name="password" class="form-control" id="password" th:field="*{password}" required>
@@ -82,8 +77,10 @@
                   <div class="col-12">
                     <button class="btn btn-success w-100" type="submit">Register</button>
                   </div>
+                  <br>
+
                   <div class="col-12">
-                    <span>Already registered? <a th:href="@{/login}">Login here</a></span>
+                    <span>Already registered? <a th:href="@{/login}"> Log In</a></span>
                   </div>
                 </form>
 

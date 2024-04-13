@@ -12,26 +12,26 @@ import java.util.Date;
 @Data
 @Builder @NoArgsConstructor @AllArgsConstructor
 @Entity
+@Table(name = "transactione")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private float amount;
 
     private String subject;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date transactionDate;
 
     private float debitedAmount;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "contact_id", referencedColumnName = "contact_id")
-    Contact contact;
+    @JoinColumn(name = "friend_user", referencedColumnName = "id")
+    User user;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "principal_user", referencedColumnName = "id")
+    private User principalUser;
 }

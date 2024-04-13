@@ -1,7 +1,5 @@
 package com.liticia.paymybuddy.security;
 
-import com.liticia.paymybuddy.Entity.User;
-import com.liticia.paymybuddy.exception.UserAlreadyExistException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
@@ -15,7 +13,6 @@ public class SecurityUtils {
         if (authentication instanceof AnonymousAuthenticationToken) {
             throw new UsernameNotFoundException("User not connected");
         }
-
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
         return authUser.getId();
     }

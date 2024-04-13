@@ -26,7 +26,7 @@ public class TransactionRepositoryTest {
     @Test
     void testShouldReturnBankAccountsOrderByCreatedAtDesc() {
         Pageable pageable = PageRequest.of(1, 2);
-        Page<Transaction> transactions = transactionRepository.findAllByUserOrderByTransactionDateDesc(User.builder().id(2).build(), pageable);
+        Page<Transaction> transactions = transactionRepository.findAllByPrincipalUserOrderByTransactionDateDesc(User.builder().id(2).build(), pageable);
 
         assertEquals(2, transactions.getTotalElements());
         assertEquals(1, transactions.getTotalPages());
