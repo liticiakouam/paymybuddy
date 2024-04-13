@@ -4,6 +4,7 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.dto.UserDto;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,11 @@ public class LoginController {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
+    }
+
+    @GetMapping("/after-login")
+    public String afterLogin() {
+        return "redirect:/home";
     }
 
     @PostMapping("/register")

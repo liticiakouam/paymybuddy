@@ -45,10 +45,6 @@ public class WebConfig implements WebMvcConfigurer {
                 ModelAndView modelAndView = new ModelAndView("serverError");
                 modelAndView.setStatus(HttpStatus.BAD_REQUEST);
                 return modelAndView;
-            } else if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
-                ModelAndView modelAndView = new ModelAndView("serverError");
-                modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-                return modelAndView;
             }
             return null;
         }

@@ -32,6 +32,7 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.antMatchers( "/register").permitAll()
                                 .antMatchers("/login").permitAll()
+                                .antMatchers("/static/**").permitAll()
                                 .antMatchers("/").permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -39,7 +40,7 @@ public class SpringSecurity {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/home")
+                                .defaultSuccessUrl("/after-login")
                                 .permitAll()
                 ).logout(
                         logout -> logout
