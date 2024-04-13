@@ -76,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = Transaction.builder().build();
         transaction.setSubject(transactionCreate.getSubject());
-        transaction.setUser(userFriend);
+        transaction.setFriendUser(userFriend);
         transaction.setDebitedAmount(debitedAmount);
         transaction.setAmount(transactionCreate.getAmount());
         transaction.setTransactionDate(new Date());
@@ -86,7 +86,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction1 = Transaction.builder().build();
         transaction1.setSubject(transactionCreate.getSubject());
-        transaction1.setUser(currentUser);
+        transaction1.setFriendUser(currentUser);
         transaction1.setDebitedAmount(debitedAmount);
         transaction1.setAmount(transactionCreate.getAmount());
         transaction1.setTransactionDate(new Date());

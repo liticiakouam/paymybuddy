@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,7 +28,7 @@ public class Transaction {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "friend_user", referencedColumnName = "id")
-    User user;
+    User friendUser;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "principal_user", referencedColumnName = "id")

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @NotNull
 public class TransactionCreate {
     private long contactId;
+    private long friendUser;
     private String subject;
     private float amount;
 }
