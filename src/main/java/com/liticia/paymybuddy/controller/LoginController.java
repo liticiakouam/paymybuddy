@@ -44,7 +44,7 @@ public class LoginController {
 
         if(existingUser != null){
             result.rejectValue("email", null,
-                    "There is already an account registered with the same email");
+                    "User already exist with the same email");
         }
 
         if(result.hasErrors()){
