@@ -46,8 +46,10 @@ public class LoginController {
         } catch (UserAlreadyExistException e) {
             result.rejectValue("email", null,
                     "User already exist with the same email");
-            model.addAttribute("user", userDto);
-            return "/register";
+            if(result.hasErrors()){
+                model.addAttribute("user", userDto);
+                return "/register";
+            }
         }
 
         return "redirect:/login";
