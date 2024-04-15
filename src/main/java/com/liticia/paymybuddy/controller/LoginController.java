@@ -45,10 +45,10 @@ public class LoginController {
         try {
             userService.saveUser(userDto);
         } catch (UserAlreadyExistException e) {
-            model.addAttribute("email",
+            attributes.addFlashAttribute("email",
                     "User already exist with the same email");
             model.addAttribute("user", userDto);
-            return "/register";
+            return "redirect:/register";
         }
 
         return "redirect:/login";
