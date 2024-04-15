@@ -4,6 +4,7 @@ import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.UserRepository;
 import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.dto.UserDto;
+import com.liticia.paymybuddy.exception.UserAlreadyExistException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +51,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(UserDto userDto) {
+        User existingUser = userRepository.findUserByEmail(userDto.getEmail());
+        if (existingUser != null) {
+            throw new UserAlreadyExistException();
+        }
         User user = new User();
 
         user.setLastname(userDto.getLastname());

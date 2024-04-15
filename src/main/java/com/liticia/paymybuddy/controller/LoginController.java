@@ -3,6 +3,7 @@ package com.liticia.paymybuddy.controller;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Service.UserService;
 import com.liticia.paymybuddy.dto.UserDto;
+import com.liticia.paymybuddy.exception.UserAlreadyExistException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -40,18 +41,15 @@ public class LoginController {
     public String registration(@Valid @ModelAttribute("user") UserDto userDto,
                                BindingResult result,
                                Model model){
-        User existingUser = userService.findUserByEmail(userDto.getEmail());
-
-        if(existingUser != null){
+        try {
+            userService.saveUser(userDto);
+        } catch (UserAlreadyExistException e) {
             result.rejectValue("email", null,
                     "User already exist with the same email");
-        }
-
-        if(result.hasErrors()){
             model.addAttribute("user", userDto);
             return "/register";
         }
-        userService.saveUser(userDto);
+
         return "redirect:/login";
     }
 
