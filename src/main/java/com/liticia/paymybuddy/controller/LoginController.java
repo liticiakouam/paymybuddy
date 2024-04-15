@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -39,17 +40,15 @@ public class LoginController {
 
     @PostMapping("/register")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto,
-                               BindingResult result,
+                               RedirectAttributes attributes,
                                Model model){
         try {
             userService.saveUser(userDto);
         } catch (UserAlreadyExistException e) {
-            result.rejectValue("email", null,
+            model.addAttribute("email",
                     "User already exist with the same email");
-            if(result.hasErrors()){
-                model.addAttribute("user", userDto);
-                return "/register";
-            }
+            model.addAttribute("user", userDto);
+            return "/register";
         }
 
         return "redirect:/login";

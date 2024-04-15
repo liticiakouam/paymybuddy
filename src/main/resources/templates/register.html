@@ -46,7 +46,6 @@
                   <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
                   <p class="text-center small">Enter your personal details to create account</p>
                 </div>
-
                 <form  th:action="@{/register}" th:object="${user}" method="post">
 
                   <div class="col-12">
@@ -66,8 +65,9 @@
                   <div class="col-12">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" name="email" class="form-control" id="email" th:field="*{email}" required>
-                    <p th:errors = "*{email}" class="text-danger"
-                       th:if="${#fields.hasErrors('email')}"></p>
+                    <div th:if="${email}">
+                      <p th:text="${email}" class="text-danger"></p>
+                    </div>
                   </div>
                   <br>
                   <div class="col-12">
