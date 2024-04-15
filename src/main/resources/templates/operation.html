@@ -153,7 +153,7 @@
                             <tr  th:each="operation : ${operations}">
                                 <td th:text="${operation.bankAccount.description}"></td>
                                 <td th:text="${operation.operationType}"></td>
-                                <td th:text="${operation.amount}"></td>
+                                <td th:text="${#numbers.formatDecimal(operation.amount, 1, 'POINT', 2, 'COMMA')}"></td>
                             </tr>
                         </tbody>
                     </table>

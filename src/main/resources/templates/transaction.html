@@ -127,7 +127,7 @@
           <tr th:each="transaction : ${transactions}">
             <td th:text="${transaction.friendUser.firstname} +' '+ ${transaction.friendUser.lastname}"></td>
             <td th:text="${transaction.subject}"></td>
-            <td th:text="${transaction.amount}"></td>
+            <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'POINT', 2, 'COMMA')}"></td>
             <td th:text="${#dates.format(transaction.transactionDate, 'dd-MM-yyyy')}"></td>
 
           </tr>

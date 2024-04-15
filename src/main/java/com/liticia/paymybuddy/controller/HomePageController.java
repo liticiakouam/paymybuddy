@@ -18,7 +18,9 @@ public class HomePageController {
     @GetMapping("/home")
     public String homePage(Model model) {
         Optional<User> optionalUser = userService.findById(SecurityUtils.getCurrentUserId());
+        String balance = String.format("%.2f", optionalUser.get().getBalance());
         model.addAttribute("user", optionalUser.get());
+        model.addAttribute("balance", balance);
         return "home";
     }
 }
