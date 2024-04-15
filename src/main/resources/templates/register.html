@@ -49,14 +49,14 @@
                 <form  th:action="@{/register}" th:object="${user}" method="post">
 
                   <div class="col-12">
-                    <label for="firstname" class="form-label">FirstName</label>
+                    <label for="firstname" class="form-label">Firstname</label>
                     <input type="text" name="name" class="form-control" id="firstname" th:field="*{firstname}" required>
                     <p th:errors = "*{firstname}" class="text-danger"
                        th:if="${#fields.hasErrors('firstname')}"></p>
                   </div>
                   <br>
                   <div class="col-12">
-                    <label for="lastname" class="form-label">LastName</label>
+                    <label for="lastname" class="form-label">Lastname</label>
                     <input type="text" name="name" class="form-control" id="lastname" th:field="*{lastname}" required>
                     <p th:errors = "*{lastname}" class="text-danger"
                        th:if="${#fields.hasErrors('lastname')}"></p>

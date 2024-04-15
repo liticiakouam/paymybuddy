@@ -21,9 +21,9 @@ import javax.validation.Valid;
 public class LoginController {
     private UserService userService;
 
-    @GetMapping({"/", " "})
-    public String index(){
-        return "landingPage";
+    @GetMapping({"/", " ", "/login"})
+    public String login(){
+        return "login";
     }
 
     @GetMapping("/register")
@@ -53,12 +53,5 @@ public class LoginController {
 
         return "redirect:/login";
     }
-
-    @GetMapping("/login")
-    public String login(){
-        return "login";
-    }
-
-
 
 }
