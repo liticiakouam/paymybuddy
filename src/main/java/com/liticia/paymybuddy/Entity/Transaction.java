@@ -26,6 +26,9 @@ public class Transaction {
 
     private float debitedAmount;
 
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "friend_user", referencedColumnName = "id")
     User friendUser;

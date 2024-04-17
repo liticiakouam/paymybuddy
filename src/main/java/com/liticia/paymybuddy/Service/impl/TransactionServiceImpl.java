@@ -2,6 +2,7 @@ package com.liticia.paymybuddy.Service.impl;
 
 import com.liticia.paymybuddy.Entity.Contact;
 import com.liticia.paymybuddy.Entity.Transaction;
+import com.liticia.paymybuddy.Entity.TransactionStatus;
 import com.liticia.paymybuddy.Entity.User;
 import com.liticia.paymybuddy.Repository.ContactRepository;
 import com.liticia.paymybuddy.Repository.TransactionRepository;
@@ -81,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAmount(transactionCreate.getAmount());
         transaction.setTransactionDate(new Date());
         transaction.setPrincipalUser(currentUser);
-
+        transaction.setStatus(TransactionStatus.SEND);
         transactionRepository.save(transaction);
 
         Transaction transaction1 = Transaction.builder().build();
@@ -91,6 +92,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction1.setAmount(transactionCreate.getAmount());
         transaction1.setTransactionDate(new Date());
         transaction1.setPrincipalUser(userFriend);
+        transaction1.setStatus(TransactionStatus.RECEIVE);
 
         transactionRepository.save(transaction1);
     }

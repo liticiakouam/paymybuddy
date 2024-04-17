@@ -7,6 +7,7 @@ import com.liticia.paymybuddy.Service.TransactionService;
 import com.liticia.paymybuddy.dto.TransactionCreate;
 import com.liticia.paymybuddy.exception.ContactNotFoundException;
 import com.liticia.paymybuddy.exception.InsufficientBalanceException;
+import com.liticia.paymybuddy.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

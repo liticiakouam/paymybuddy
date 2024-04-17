@@ -96,7 +96,7 @@
               </select>
           </div>
           <div class="col-md-4">
-            <input class="form-control" th:field="*{amount}" type="number" placeholder="amount" min="500">
+            <input class="form-control" th:field="*{amount}" type="number" placeholder="amount" min="500" max="1000000">
           </div>
           <div class="col-md-4">
             <input class="form-control" th:field="*{subject}" type="text" placeholder="Description">
@@ -120,6 +120,7 @@
             <th scope="col">User Name</th>
             <th scope="col">Description</th>
             <th scope="col">Amount</th>
+            <th scope="col">Status</th>
             <th scope="col">Date</th>
           </tr>
           </thead>
@@ -128,8 +129,11 @@
             <td th:text="${transaction.friendUser.firstname} +' '+ ${transaction.friendUser.lastname}"></td>
             <td th:text="${transaction.subject}"></td>
             <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td>
+              <span th:if="${transaction.status == T(com.liticia.paymybuddy.Entity.TransactionStatus).SEND}" class="text-decoration-none badge bg-success">send</span>
+              <span th:unless="${transaction.status == T(com.liticia.paymybuddy.Entity.TransactionStatus).SEND}" class="text-decoration-none badge bg-primary">receive</span>
+            </td>
             <td th:text="${#dates.format(transaction.transactionDate, 'dd-MM-yyyy')}"></td>
-
           </tr>
           </tbody>
         </table>
